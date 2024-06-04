@@ -1,5 +1,5 @@
 #!/bin/bash
-
+# Copyright 2024 Google LLC
 # Copyright 2021 The Kubernetes Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -56,3 +56,7 @@ go run sigs.k8s.io/controller-tools/cmd/controller-gen crd \
         object:headerFile="${SCRIPT_ROOT}/hack/boilerplate.go.txt" \
         paths="${SCRIPT_ROOT}/apis/..." \
         output:crd:artifacts:config="${SCRIPT_ROOT}/config/crds"
+
+for file in "${SCRIPT_ROOT}/config/crds/"/*; do
+  cat "${SCRIPT_ROOT}/hack/boilerplate.yaml.txt" "$file" > temp && mv temp "$file"
+done
