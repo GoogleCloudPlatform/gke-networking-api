@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 
 # https://raw.githubusercontent.com/kubernetes/code-generator/v0.26.2/generate-groups.sh
-# Copyright 2024 Google LLC
-# Copyright The Kubernetes Authors.
+# Copyright 2024 The Kubernetes Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
