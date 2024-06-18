@@ -57,6 +57,30 @@ for crd in "network" "gcpfirewall"; do
     output:crd:dir="${SCRIPT_ROOT}/config/crds"
 done
 
+
+# kube_codegen does not currently support register-gen.
+# As a workaround, we invoke the register-gen script directly.
+(
+  # To support running this script from anywhere, first cd into this directory,
+  # and then install with forced module mode on and fully qualified name.
+  cd "$(dirname "${0}")"
+  GO111MODULE=on go install k8s.io/code-generator/cmd/register-gen
+)
+
+# Go installs the above commands to get installed in $GOBIN if defined, and $GOPATH/bin otherwise:
+GOBIN="$(go env GOBIN)"
+gobin="${GOBIN:-$(go env GOPATH)/bin}"
+
+for crd_with_version in "network/v1" "network/v1alpha1" "gcpfirewall/v1" "gcpfirewall/v1beta1"; do
+  echo "Generating register for CRD $crd_with_version"
+  "${gobin}/register-gen" \
+      "${SCRIPT_ROOT}/apis/$crd_with_version" \
+      --go-header-file "${SCRIPT_ROOT}/hack/boilerplate.go.txt" \
+      --output-file zz_generated.register.go
+done
+
+# controller-gen doesn't currently generate YAML boilerplate.
+# As a workaround, we concatenate this boilerplate using cat.
 for file in "${SCRIPT_ROOT}/config/crds/"/*; do
   cat "${SCRIPT_ROOT}/hack/boilerplate.yaml.txt" "$file" > temp && mv temp "$file"
 done
