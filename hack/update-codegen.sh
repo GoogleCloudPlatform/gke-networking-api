@@ -21,11 +21,10 @@ readonly SCRIPT_ROOT=$(cd $(dirname ${BASH_SOURCE})/.. && pwd)
 echo "SCRIPT_ROOT ${SCRIPT_ROOT}"
 cd ${SCRIPT_ROOT}
 
-readonly GO111MODULE="on"
 readonly GOFLAGS="-mod=mod"
 readonly GOPATH="$(mktemp -d)"
 
-export GO111MODULE GOFLAGS GOPATH
+export GOFLAGS GOPATH
 
 # Even when modules are enabled, the code-generator tools always write to
 # a traditional GOPATH directory, so fake on up to point to the current
@@ -34,28 +33,54 @@ mkdir -p "$GOPATH/src/github.com/GoogleCloudPlatform"
 ln -s "${SCRIPT_ROOT}" "$GOPATH/src/github.com/GoogleCloudPlatform/gke-networking-api"
 
 echo "${SCRIPT_ROOT} ${GOPATH}/src/github.com/GoogleCloudPlatform/gke-networking-api"
+cd ${SCRIPT_ROOT}
 
-echo "Generating network CRD clientset"
-"${SCRIPT_ROOT}/hack/generate-groups.sh" all \
-  github.com/GoogleCloudPlatform/gke-networking-api/client/network \
-  github.com/GoogleCloudPlatform/gke-networking-api/apis \
-  "network:v1alpha1,v1" \
-  --go-header-file "${SCRIPT_ROOT}/hack/boilerplate.go.txt"
+# https://raw.githubusercontent.com/kubernetes/code-generator/release-1.30/kube_codegen.sh
+source "${SCRIPT_ROOT}/hack/kube_codegen.sh"
 
-echo "Generating firewall CRD clientset"
-"${SCRIPT_ROOT}/hack/generate-groups.sh" all \
-  github.com/GoogleCloudPlatform/gke-networking-api/client/gcpfirewall \
-  github.com/GoogleCloudPlatform/gke-networking-api/apis \
-  "gcpfirewall:v1beta1,v1" \
-  --go-header-file "${SCRIPT_ROOT}/hack/boilerplate.go.txt"
+THIS_PKG="github.com/GoogleCloudPlatform/gke-networking-api"
+
+for crd in "network" "gcpfirewall"; do
+  echo "Generating $crd CRD client"
+  kube::codegen::gen_client \
+      --with-watch \
+      --output-dir "${SCRIPT_ROOT}/client/$crd" \
+      --output-pkg "${THIS_PKG}/client/$crd" \
+      --boilerplate "${SCRIPT_ROOT}/hack/boilerplate.go.txt" \
+      --one-input-api "$crd" \
+      "${SCRIPT_ROOT}/apis"
+
+  echo "Generating $crd CRD artifacts"
+  go run sigs.k8s.io/controller-tools/cmd/controller-gen crd \
+    object:headerFile="${SCRIPT_ROOT}/hack/boilerplate.go.txt" \
+    paths="${SCRIPT_ROOT}/apis/$crd/..." \
+    output:crd:dir="${SCRIPT_ROOT}/config/crds"
+done
 
 
-echo "Generating CRD artifacts"
-go run sigs.k8s.io/controller-tools/cmd/controller-gen crd \
-        object:headerFile="${SCRIPT_ROOT}/hack/boilerplate.go.txt" \
-        paths="${SCRIPT_ROOT}/apis/..." \
-        output:crd:artifacts:config="${SCRIPT_ROOT}/config/crds"
+# kube_codegen does not currently support register-gen.
+# As a workaround, we invoke the register-gen script directly.
+(
+  # To support running this script from anywhere, first cd into this directory,
+  # and then install with forced module mode on and fully qualified name.
+  cd "$(dirname "${0}")"
+  GO111MODULE=on go install k8s.io/code-generator/cmd/register-gen
+)
 
+# Go installs the above commands to get installed in $GOBIN if defined, and $GOPATH/bin otherwise:
+GOBIN="$(go env GOBIN)"
+gobin="${GOBIN:-$(go env GOPATH)/bin}"
+
+for crd_with_version in "network/v1" "network/v1alpha1" "gcpfirewall/v1" "gcpfirewall/v1beta1"; do
+  echo "Generating register for CRD $crd_with_version"
+  "${gobin}/register-gen" \
+      "${SCRIPT_ROOT}/apis/$crd_with_version" \
+      --go-header-file "${SCRIPT_ROOT}/hack/boilerplate.go.txt" \
+      --output-file zz_generated.register.go
+done
+
+# controller-gen doesn't currently generate YAML boilerplate.
+# As a workaround, we concatenate this boilerplate using cat.
 for file in "${SCRIPT_ROOT}/config/crds/"/*; do
   cat "${SCRIPT_ROOT}/hack/boilerplate.yaml.txt" "$file" > temp && mv temp "$file"
 done
