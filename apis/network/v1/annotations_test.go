@@ -19,6 +19,7 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
+	"k8s.io/utils/ptr"
 )
 
 func TestPodIPsAnnotation(t *testing.T) {
@@ -278,6 +279,102 @@ func TestParseNICInfoAnnotation(t *testing.T) {
 
 			if diff := cmp.Diff(parsed, tc.input); diff != "" {
 				t.Fatalf("ParseNICInfoAnnotation(%s)  returns diff: (-got +want): %s", marshalled, diff)
+			}
+		})
+	}
+}
+
+func TestInterfaceStatusAnnotation(t *testing.T) {
+	tests := []struct {
+		name     string
+		input    InterfaceStatusAnnotation
+		expected string
+	}{
+		{
+			name:     "nil",
+			input:    nil,
+			expected: "null",
+		},
+		{
+			name:     "empty list",
+			input:    InterfaceStatusAnnotation{},
+			expected: "[]",
+		},
+		{
+			name: "minimal status",
+			input: InterfaceStatusAnnotation{
+				InterfaceStatus{
+					NetworkName: "network",
+					IPAddresses: []string{"1.2.3.4"},
+					MACAddress:  "aa:bb:cc:dd:ee",
+				},
+			},
+			expected: `[{"networkName":"network","ipAddresses":["1.2.3.4"],"macAddress":"aa:bb:cc:dd:ee"}]`,
+		},
+		{
+			name: "max status",
+			input: InterfaceStatusAnnotation{
+				InterfaceStatus{
+					NetworkName: "network",
+					IPAddresses: []string{"1.2.3.4", "ff::01"},
+					MACAddress:  "aa:bb:cc:dd:ee",
+					Routes: []Route{
+						{To: "10.0.0.0/24"},
+					},
+					Gateway4: ptr.To("10.0.0.1"),
+					DNSConfig: &DNSConfig{
+						Nameservers: []string{"8.8.8.8"},
+						Searches:    []string{"a.domain"},
+					},
+					DHCPServerIP: ptr.To("10.0.0.2"),
+				},
+			},
+			expected: `[{"networkName":"network","ipAddresses":["1.2.3.4","ff::01"],"macAddress":"aa:bb:cc:dd:ee","routes":[{"to":"10.0.0.0/24"}],"gateway4":"10.0.0.1","dnsConfig":{"nameservers":["8.8.8.8"],"searches":["a.domain"]},"dhcpServerIP":"10.0.0.2"}]`,
+		},
+		{
+			name: "multiple interfaces",
+			input: InterfaceStatusAnnotation{
+				InterfaceStatus{
+					NetworkName: "network",
+					IPAddresses: []string{"1.2.3.4"},
+					MACAddress:  "aa:bb:cc:dd:ee",
+				},
+				InterfaceStatus{
+					NetworkName: "network-2",
+					IPAddresses: []string{"1.2.3.5", "ff::01"},
+					MACAddress:  "aa:bb:cc:dd:ff",
+					Routes: []Route{
+						{To: "10.0.0.0/24"},
+					},
+					Gateway4: ptr.To("10.0.0.1"),
+					DNSConfig: &DNSConfig{
+						Nameservers: []string{"8.8.8.8"},
+						Searches:    []string{"a.domain"},
+					},
+					DHCPServerIP: ptr.To("10.0.0.2"),
+				},
+			},
+			expected: `[{"networkName":"network","ipAddresses":["1.2.3.4"],"macAddress":"aa:bb:cc:dd:ee"},{"networkName":"network-2","ipAddresses":["1.2.3.5","ff::01"],"macAddress":"aa:bb:cc:dd:ff","routes":[{"to":"10.0.0.0/24"}],"gateway4":"10.0.0.1","dnsConfig":{"nameservers":["8.8.8.8"],"searches":["a.domain"]},"dhcpServerIP":"10.0.0.2"}]`,
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			marshalled, err := MarshalAnnotation(tc.input)
+			if err != nil {
+				t.Fatalf("MarshalAnnotation(%+v) failed with error: %v", tc.input, err)
+			}
+			if marshalled != tc.expected {
+				t.Fatalf("MarshalAnnotation(%+v) returns %q but want %q", tc.input, marshalled, tc.expected)
+			}
+
+			parsed, err := ParseInterfaceStatusAnnotation(marshalled)
+			if err != nil {
+				t.Fatalf("ParseInterfaceStatusAnnotation(%s) failed with error: %v", marshalled, err)
+			}
+
+			if diff := cmp.Diff(parsed, tc.input); diff != "" {
+				t.Fatalf("ParseInterfaceStatusAnnotation(%s) returns diff: (-got +want): %s", marshalled, diff)
 			}
 		})
 	}
