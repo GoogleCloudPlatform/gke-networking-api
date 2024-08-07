@@ -63,10 +63,12 @@ const (
 	AutoGenAnnotationValTrue = "true"
 	// NorthInterfacesAnnotationKey is the annotation key used to hold interfaces data per node.
 	NorthInterfacesAnnotationKey = "networking.gke.io/north-interfaces"
-	// NICInfoAnnotationKey specifies the mapping between the fist IP addresse and the PCI BDF number on the node.
+	// NICInfoAnnotationKey specifies the mapping between the fist IP address and the PCI BDF number on the node.
 	NICInfoAnnotationKey = "networking.gke.io/nic-info"
 	// InterfaceStatusAnnotationKey is the key of the annotation which shows information of each interface of a pod.
 	InterfaceStatusAnnotationKey = "networking.gke.io/interface-status"
+	// NetworkGatewayIPAnnotationKey is the network annotation key used to hold egress NAT gateway IP.
+	NetworkGatewayIPAnnotationKey = "networking.gke.io/gateway-ip"
 )
 
 // InterfaceAnnotation is the value of the interface annotation.
