@@ -40,7 +40,7 @@ source "${SCRIPT_ROOT}/hack/kube_codegen.sh"
 
 THIS_PKG="github.com/GoogleCloudPlatform/gke-networking-api"
 
-for crd in "network" "gcpfirewall"; do
+for crd in "network" "gcpfirewall" "nodetopology"; do
   echo "Generating $crd CRD client"
   kube::codegen::gen_client \
       --with-watch \
@@ -71,7 +71,7 @@ done
 GOBIN="$(go env GOBIN)"
 gobin="${GOBIN:-$(go env GOPATH)/bin}"
 
-for crd_with_version in "network/v1" "network/v1alpha1" "gcpfirewall/v1" "gcpfirewall/v1beta1"; do
+for crd_with_version in "network/v1" "network/v1alpha1" "gcpfirewall/v1" "gcpfirewall/v1beta1" "nodetopology/v1"; do
   echo "Generating register for CRD $crd_with_version"
   "${gobin}/register-gen" \
       "${SCRIPT_ROOT}/apis/$crd_with_version" \
