@@ -41,6 +41,11 @@ type GCPFirewall struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
+	// DescriptionHello describes a GCP firewall in a human-readable way. Usually it
+	// provides also an information on the producer of this GCPFirewall
+	// custom resource.
+	Description string `json:"description,omitempty"`
+
 	// Spec is the desired configuration for GCP firewall
 	// More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status
 	Spec GCPFirewallSpec `json:"spec,omitempty"`
