@@ -46,7 +46,7 @@ spec:
           description:
             description: |-
               Description describes a GCP firewall in a human-readable way. Usually it
-              provides also an information on the producer of this GCPFirewall
+              provides also information on the producer of this GCPFirewall
               custom resource.
             type: string
           kind:
