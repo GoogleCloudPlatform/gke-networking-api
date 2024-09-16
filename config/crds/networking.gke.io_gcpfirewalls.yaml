@@ -43,6 +43,12 @@ spec:
               may reject unrecognized values.
               More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
             type: string
+          description:
+            description: |-
+              Description describes a GCP firewall in a human-readable way. Usually it
+              provides also information on the producer of this GCPFirewall
+              custom resource.
+            type: string
           kind:
             description: |-
               Kind is a string value representing the REST resource this object represents.
