@@ -52,6 +52,14 @@ func (c *FakeNetworkingV1) NetworkLists() v1.NetworkListInterface {
 	return &FakeNetworkLists{c}
 }
 
+func (c *FakeNetworkingV1) Subnetworks() v1.SubnetworkInterface {
+	return &FakeSubnetworks{c}
+}
+
+func (c *FakeNetworkingV1) SubnetworkLists(namespace string) v1.SubnetworkListInterface {
+	return &FakeSubnetworkLists{c, namespace}
+}
+
 // RESTClient returns a RESTClient that is used to communicate
 // with API server by this client implementation.
 func (c *FakeNetworkingV1) RESTClient() rest.Interface {

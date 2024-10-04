@@ -60,6 +60,8 @@ func (f *sharedInformerFactory) ForResource(resource schema.GroupVersionResource
 		return &genericInformer{resource: resource.GroupResource(), informer: f.Networking().V1().Networks().Informer()}, nil
 	case v1.SchemeGroupVersion.WithResource("networkinterfaces"):
 		return &genericInformer{resource: resource.GroupResource(), informer: f.Networking().V1().NetworkInterfaces().Informer()}, nil
+	case v1.SchemeGroupVersion.WithResource("subnetworks"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Networking().V1().Subnetworks().Informer()}, nil
 
 		// Group=networking.gke.io, Version=v1alpha1
 	case v1alpha1.SchemeGroupVersion.WithResource("gkenetworkparamsets"):
