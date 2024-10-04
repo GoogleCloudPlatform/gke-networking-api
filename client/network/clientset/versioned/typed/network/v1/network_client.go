@@ -34,6 +34,8 @@ type NetworkingV1Interface interface {
 	NetworkInterfacesGetter
 	NetworkInterfaceListsGetter
 	NetworkListsGetter
+	SubnetworksGetter
+	SubnetworkListsGetter
 }
 
 // NetworkingV1Client is used to interact with features provided by the networking.gke.io group.
@@ -63,6 +65,14 @@ func (c *NetworkingV1Client) NetworkInterfaceLists(namespace string) NetworkInte
 
 func (c *NetworkingV1Client) NetworkLists() NetworkListInterface {
 	return newNetworkLists(c)
+}
+
+func (c *NetworkingV1Client) Subnetworks() SubnetworkInterface {
+	return newSubnetworks(c)
+}
+
+func (c *NetworkingV1Client) SubnetworkLists(namespace string) SubnetworkListInterface {
+	return newSubnetworkLists(c, namespace)
 }
 
 // NewForConfig creates a new NetworkingV1Client for the given config.

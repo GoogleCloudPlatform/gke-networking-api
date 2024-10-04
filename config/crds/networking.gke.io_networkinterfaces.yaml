@@ -88,6 +88,10 @@ spec:
                   is connected.
                 minLength: 1
                 type: string
+              subnetworkName:
+                description: SubnetworkName refers to a subnetwork of a network within
+                  the cluster.
+                type: string
             required:
             - networkName
             type: object
