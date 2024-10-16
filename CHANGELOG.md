@@ -10,7 +10,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Status conditions to be used for validation updates for GNPs with `NetworkAttachment`.
 - Innterface-status annotation was added to pod.
-- Network annotation to hold egress NAT gateway IP.
 - The `NodeTopology` CRD definition.
 - The `description` field in the GCPFirewall CRD.
 
