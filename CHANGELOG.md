@@ -15,6 +15,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - The `NodeTopology` CRD definition.
 - The `description` field in the GCPFirewall CRD.
 
+### Removed
+
+- Unused v1beta GCPFirewall CRD.
+
 ## [0.1.1] - 2024-07-02
 
 ### Changed
