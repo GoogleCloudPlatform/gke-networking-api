@@ -22,8 +22,6 @@ import (
 	clientset "github.com/GoogleCloudPlatform/gke-networking-api/client/gcpfirewall/clientset/versioned"
 	networkingv1 "github.com/GoogleCloudPlatform/gke-networking-api/client/gcpfirewall/clientset/versioned/typed/gcpfirewall/v1"
 	fakenetworkingv1 "github.com/GoogleCloudPlatform/gke-networking-api/client/gcpfirewall/clientset/versioned/typed/gcpfirewall/v1/fake"
-	networkingv1beta1 "github.com/GoogleCloudPlatform/gke-networking-api/client/gcpfirewall/clientset/versioned/typed/gcpfirewall/v1beta1"
-	fakenetworkingv1beta1 "github.com/GoogleCloudPlatform/gke-networking-api/client/gcpfirewall/clientset/versioned/typed/gcpfirewall/v1beta1/fake"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/watch"
 	"k8s.io/client-go/discovery"
@@ -88,9 +86,4 @@ var (
 // NetworkingV1 retrieves the NetworkingV1Client
 func (c *Clientset) NetworkingV1() networkingv1.NetworkingV1Interface {
 	return &fakenetworkingv1.FakeNetworkingV1{Fake: &c.Fake}
-}
-
-// NetworkingV1beta1 retrieves the NetworkingV1beta1Client
-func (c *Clientset) NetworkingV1beta1() networkingv1beta1.NetworkingV1beta1Interface {
-	return &fakenetworkingv1beta1.FakeNetworkingV1beta1{Fake: &c.Fake}
 }
