@@ -29,3 +29,7 @@ type NetworkInterfaceExpansion interface{}
 type NetworkInterfaceListExpansion interface{}
 
 type NetworkListExpansion interface{}
+
+type SubnetworkExpansion interface{}
+
+type SubnetworkListExpansion interface{}
