@@ -19,11 +19,11 @@ limitations under the License.
 package v1
 
 import (
-	"context"
+	context "context"
 
 	networkv1 "github.com/GoogleCloudPlatform/gke-networking-api/apis/network/v1"
 	scheme "github.com/GoogleCloudPlatform/gke-networking-api/client/network/clientset/versioned/scheme"
-	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	gentype "k8s.io/client-go/gentype"
 )
 
@@ -35,7 +35,7 @@ type SubnetworkListsGetter interface {
 
 // SubnetworkListInterface has methods to work with SubnetworkList resources.
 type SubnetworkListInterface interface {
-	Get(ctx context.Context, name string, opts v1.GetOptions) (*networkv1.SubnetworkList, error)
+	Get(ctx context.Context, name string, opts metav1.GetOptions) (*networkv1.SubnetworkList, error)
 	SubnetworkListExpansion
 }
 
@@ -52,6 +52,7 @@ func newSubnetworkLists(c *NetworkingV1Client, namespace string) *subnetworkList
 			c.RESTClient(),
 			scheme.ParameterCodec,
 			namespace,
-			func() *networkv1.SubnetworkList { return &networkv1.SubnetworkList{} }),
+			func() *networkv1.SubnetworkList { return &networkv1.SubnetworkList{} },
+		),
 	}
 }

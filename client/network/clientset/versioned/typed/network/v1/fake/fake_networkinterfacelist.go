@@ -19,31 +19,26 @@ limitations under the License.
 package fake
 
 import (
-	"context"
-
 	v1 "github.com/GoogleCloudPlatform/gke-networking-api/apis/network/v1"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	testing "k8s.io/client-go/testing"
+	networkv1 "github.com/GoogleCloudPlatform/gke-networking-api/client/network/clientset/versioned/typed/network/v1"
+	gentype "k8s.io/client-go/gentype"
 )
 
-// FakeNetworkInterfaceLists implements NetworkInterfaceListInterface
-type FakeNetworkInterfaceLists struct {
+// fakeNetworkInterfaceLists implements NetworkInterfaceListInterface
+type fakeNetworkInterfaceLists struct {
+	*gentype.FakeClient[*v1.NetworkInterfaceList]
 	Fake *FakeNetworkingV1
-	ns   string
 }
 
-var networkinterfacelistsResource = v1.SchemeGroupVersion.WithResource("networkinterfacelists")
-
-var networkinterfacelistsKind = v1.SchemeGroupVersion.WithKind("NetworkInterfaceList")
-
-// Get takes name of the networkInterfaceList, and returns the corresponding networkInterfaceList object, and an error if there is any.
-func (c *FakeNetworkInterfaceLists) Get(ctx context.Context, name string, options metav1.GetOptions) (result *v1.NetworkInterfaceList, err error) {
-	emptyResult := &v1.NetworkInterfaceList{}
-	obj, err := c.Fake.
-		Invokes(testing.NewGetActionWithOptions(networkinterfacelistsResource, c.ns, name, options), emptyResult)
-
-	if obj == nil {
-		return emptyResult, err
+func newFakeNetworkInterfaceLists(fake *FakeNetworkingV1, namespace string) networkv1.NetworkInterfaceListInterface {
+	return &fakeNetworkInterfaceLists{
+		gentype.NewFakeClient[*v1.NetworkInterfaceList](
+			fake.Fake,
+			namespace,
+			v1.SchemeGroupVersion.WithResource("networkinterfacelists"),
+			v1.SchemeGroupVersion.WithKind("NetworkInterfaceList"),
+			func() *v1.NetworkInterfaceList { return &v1.NetworkInterfaceList{} },
+		),
+		fake,
 	}
-	return obj.(*v1.NetworkInterfaceList), err
 }

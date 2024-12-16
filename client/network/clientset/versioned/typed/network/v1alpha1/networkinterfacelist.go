@@ -19,9 +19,9 @@ limitations under the License.
 package v1alpha1
 
 import (
-	"context"
+	context "context"
 
-	v1alpha1 "github.com/GoogleCloudPlatform/gke-networking-api/apis/network/v1alpha1"
+	networkv1alpha1 "github.com/GoogleCloudPlatform/gke-networking-api/apis/network/v1alpha1"
 	scheme "github.com/GoogleCloudPlatform/gke-networking-api/client/network/clientset/versioned/scheme"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	gentype "k8s.io/client-go/gentype"
@@ -35,23 +35,24 @@ type NetworkInterfaceListsGetter interface {
 
 // NetworkInterfaceListInterface has methods to work with NetworkInterfaceList resources.
 type NetworkInterfaceListInterface interface {
-	Get(ctx context.Context, name string, opts v1.GetOptions) (*v1alpha1.NetworkInterfaceList, error)
+	Get(ctx context.Context, name string, opts v1.GetOptions) (*networkv1alpha1.NetworkInterfaceList, error)
 	NetworkInterfaceListExpansion
 }
 
 // networkInterfaceLists implements NetworkInterfaceListInterface
 type networkInterfaceLists struct {
-	*gentype.Client[*v1alpha1.NetworkInterfaceList]
+	*gentype.Client[*networkv1alpha1.NetworkInterfaceList]
 }
 
 // newNetworkInterfaceLists returns a NetworkInterfaceLists
 func newNetworkInterfaceLists(c *NetworkingV1alpha1Client, namespace string) *networkInterfaceLists {
 	return &networkInterfaceLists{
-		gentype.NewClient[*v1alpha1.NetworkInterfaceList](
+		gentype.NewClient[*networkv1alpha1.NetworkInterfaceList](
 			"networkinterfacelists",
 			c.RESTClient(),
 			scheme.ParameterCodec,
 			namespace,
-			func() *v1alpha1.NetworkInterfaceList { return &v1alpha1.NetworkInterfaceList{} }),
+			func() *networkv1alpha1.NetworkInterfaceList { return &networkv1alpha1.NetworkInterfaceList{} },
+		),
 	}
 }
