@@ -19,11 +19,11 @@ limitations under the License.
 package v1
 
 import (
-	"context"
+	context "context"
 
 	networkv1 "github.com/GoogleCloudPlatform/gke-networking-api/apis/network/v1"
 	scheme "github.com/GoogleCloudPlatform/gke-networking-api/client/network/clientset/versioned/scheme"
-	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	gentype "k8s.io/client-go/gentype"
 )
 
@@ -35,7 +35,7 @@ type NetworkInterfaceListsGetter interface {
 
 // NetworkInterfaceListInterface has methods to work with NetworkInterfaceList resources.
 type NetworkInterfaceListInterface interface {
-	Get(ctx context.Context, name string, opts v1.GetOptions) (*networkv1.NetworkInterfaceList, error)
+	Get(ctx context.Context, name string, opts metav1.GetOptions) (*networkv1.NetworkInterfaceList, error)
 	NetworkInterfaceListExpansion
 }
 
@@ -52,6 +52,7 @@ func newNetworkInterfaceLists(c *NetworkingV1Client, namespace string) *networkI
 			c.RESTClient(),
 			scheme.ParameterCodec,
 			namespace,
-			func() *networkv1.NetworkInterfaceList { return &networkv1.NetworkInterfaceList{} }),
+			func() *networkv1.NetworkInterfaceList { return &networkv1.NetworkInterfaceList{} },
+		),
 	}
 }

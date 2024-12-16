@@ -19,10 +19,10 @@ limitations under the License.
 package v1alpha1
 
 import (
-	v1alpha1 "github.com/GoogleCloudPlatform/gke-networking-api/apis/network/v1alpha1"
-	"k8s.io/apimachinery/pkg/labels"
-	"k8s.io/client-go/listers"
-	"k8s.io/client-go/tools/cache"
+	networkv1alpha1 "github.com/GoogleCloudPlatform/gke-networking-api/apis/network/v1alpha1"
+	labels "k8s.io/apimachinery/pkg/labels"
+	listers "k8s.io/client-go/listers"
+	cache "k8s.io/client-go/tools/cache"
 )
 
 // NetworkLister helps list Networks.
@@ -30,19 +30,19 @@ import (
 type NetworkLister interface {
 	// List lists all Networks in the indexer.
 	// Objects returned here must be treated as read-only.
-	List(selector labels.Selector) (ret []*v1alpha1.Network, err error)
+	List(selector labels.Selector) (ret []*networkv1alpha1.Network, err error)
 	// Get retrieves the Network from the index for a given name.
 	// Objects returned here must be treated as read-only.
-	Get(name string) (*v1alpha1.Network, error)
+	Get(name string) (*networkv1alpha1.Network, error)
 	NetworkListerExpansion
 }
 
 // networkLister implements the NetworkLister interface.
 type networkLister struct {
-	listers.ResourceIndexer[*v1alpha1.Network]
+	listers.ResourceIndexer[*networkv1alpha1.Network]
 }
 
 // NewNetworkLister returns a new NetworkLister.
 func NewNetworkLister(indexer cache.Indexer) NetworkLister {
-	return &networkLister{listers.New[*v1alpha1.Network](indexer, v1alpha1.Resource("network"))}
+	return &networkLister{listers.New[*networkv1alpha1.Network](indexer, networkv1alpha1.Resource("network"))}
 }

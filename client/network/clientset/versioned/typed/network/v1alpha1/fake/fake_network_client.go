@@ -29,27 +29,27 @@ type FakeNetworkingV1alpha1 struct {
 }
 
 func (c *FakeNetworkingV1alpha1) GKENetworkParamSets() v1alpha1.GKENetworkParamSetInterface {
-	return &FakeGKENetworkParamSets{c}
+	return newFakeGKENetworkParamSets(c)
 }
 
 func (c *FakeNetworkingV1alpha1) GKENetworkParamSetLists() v1alpha1.GKENetworkParamSetListInterface {
-	return &FakeGKENetworkParamSetLists{c}
+	return newFakeGKENetworkParamSetLists(c)
 }
 
 func (c *FakeNetworkingV1alpha1) Networks() v1alpha1.NetworkInterface {
-	return &FakeNetworks{c}
+	return newFakeNetworks(c)
 }
 
 func (c *FakeNetworkingV1alpha1) NetworkInterfaces(namespace string) v1alpha1.NetworkInterfaceInterface {
-	return &FakeNetworkInterfaces{c, namespace}
+	return newFakeNetworkInterfaces(c, namespace)
 }
 
 func (c *FakeNetworkingV1alpha1) NetworkInterfaceLists(namespace string) v1alpha1.NetworkInterfaceListInterface {
-	return &FakeNetworkInterfaceLists{c, namespace}
+	return newFakeNetworkInterfaceLists(c, namespace)
 }
 
 func (c *FakeNetworkingV1alpha1) NetworkLists() v1alpha1.NetworkListInterface {
-	return &FakeNetworkLists{c}
+	return newFakeNetworkLists(c)
 }
 
 // RESTClient returns a RESTClient that is used to communicate

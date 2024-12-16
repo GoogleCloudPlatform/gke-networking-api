@@ -19,13 +19,13 @@ limitations under the License.
 package v1alpha1
 
 import (
-	"context"
+	context "context"
 	time "time"
 
-	networkv1alpha1 "github.com/GoogleCloudPlatform/gke-networking-api/apis/network/v1alpha1"
+	apisnetworkv1alpha1 "github.com/GoogleCloudPlatform/gke-networking-api/apis/network/v1alpha1"
 	versioned "github.com/GoogleCloudPlatform/gke-networking-api/client/network/clientset/versioned"
 	internalinterfaces "github.com/GoogleCloudPlatform/gke-networking-api/client/network/informers/externalversions/internalinterfaces"
-	v1alpha1 "github.com/GoogleCloudPlatform/gke-networking-api/client/network/listers/network/v1alpha1"
+	networkv1alpha1 "github.com/GoogleCloudPlatform/gke-networking-api/client/network/listers/network/v1alpha1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	watch "k8s.io/apimachinery/pkg/watch"
@@ -36,7 +36,7 @@ import (
 // NetworkInterfaces.
 type NetworkInterfaceInformer interface {
 	Informer() cache.SharedIndexInformer
-	Lister() v1alpha1.NetworkInterfaceLister
+	Lister() networkv1alpha1.NetworkInterfaceLister
 }
 
 type networkInterfaceInformer struct {
@@ -71,7 +71,7 @@ func NewFilteredNetworkInterfaceInformer(client versioned.Interface, namespace s
 				return client.NetworkingV1alpha1().NetworkInterfaces(namespace).Watch(context.TODO(), options)
 			},
 		},
-		&networkv1alpha1.NetworkInterface{},
+		&apisnetworkv1alpha1.NetworkInterface{},
 		resyncPeriod,
 		indexers,
 	)
@@ -82,9 +82,9 @@ func (f *networkInterfaceInformer) defaultInformer(client versioned.Interface, r
 }
 
 func (f *networkInterfaceInformer) Informer() cache.SharedIndexInformer {
-	return f.factory.InformerFor(&networkv1alpha1.NetworkInterface{}, f.defaultInformer)
+	return f.factory.InformerFor(&apisnetworkv1alpha1.NetworkInterface{}, f.defaultInformer)
 }
 
-func (f *networkInterfaceInformer) Lister() v1alpha1.NetworkInterfaceLister {
-	return v1alpha1.NewNetworkInterfaceLister(f.Informer().GetIndexer())
+func (f *networkInterfaceInformer) Lister() networkv1alpha1.NetworkInterfaceLister {
+	return networkv1alpha1.NewNetworkInterfaceLister(f.Informer().GetIndexer())
 }

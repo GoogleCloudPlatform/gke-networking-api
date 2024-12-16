@@ -19,9 +19,9 @@ limitations under the License.
 package v1alpha1
 
 import (
-	"context"
+	context "context"
 
-	v1alpha1 "github.com/GoogleCloudPlatform/gke-networking-api/apis/network/v1alpha1"
+	networkv1alpha1 "github.com/GoogleCloudPlatform/gke-networking-api/apis/network/v1alpha1"
 	scheme "github.com/GoogleCloudPlatform/gke-networking-api/client/network/clientset/versioned/scheme"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	types "k8s.io/apimachinery/pkg/types"
@@ -37,33 +37,34 @@ type NetworkInterfacesGetter interface {
 
 // NetworkInterfaceInterface has methods to work with NetworkInterface resources.
 type NetworkInterfaceInterface interface {
-	Create(ctx context.Context, networkInterface *v1alpha1.NetworkInterface, opts v1.CreateOptions) (*v1alpha1.NetworkInterface, error)
-	Update(ctx context.Context, networkInterface *v1alpha1.NetworkInterface, opts v1.UpdateOptions) (*v1alpha1.NetworkInterface, error)
+	Create(ctx context.Context, networkInterface *networkv1alpha1.NetworkInterface, opts v1.CreateOptions) (*networkv1alpha1.NetworkInterface, error)
+	Update(ctx context.Context, networkInterface *networkv1alpha1.NetworkInterface, opts v1.UpdateOptions) (*networkv1alpha1.NetworkInterface, error)
 	// Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
-	UpdateStatus(ctx context.Context, networkInterface *v1alpha1.NetworkInterface, opts v1.UpdateOptions) (*v1alpha1.NetworkInterface, error)
+	UpdateStatus(ctx context.Context, networkInterface *networkv1alpha1.NetworkInterface, opts v1.UpdateOptions) (*networkv1alpha1.NetworkInterface, error)
 	Delete(ctx context.Context, name string, opts v1.DeleteOptions) error
 	DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error
-	Get(ctx context.Context, name string, opts v1.GetOptions) (*v1alpha1.NetworkInterface, error)
-	List(ctx context.Context, opts v1.ListOptions) (*v1alpha1.NetworkInterfaceList, error)
+	Get(ctx context.Context, name string, opts v1.GetOptions) (*networkv1alpha1.NetworkInterface, error)
+	List(ctx context.Context, opts v1.ListOptions) (*networkv1alpha1.NetworkInterfaceList, error)
 	Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error)
-	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.NetworkInterface, err error)
+	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *networkv1alpha1.NetworkInterface, err error)
 	NetworkInterfaceExpansion
 }
 
 // networkInterfaces implements NetworkInterfaceInterface
 type networkInterfaces struct {
-	*gentype.ClientWithList[*v1alpha1.NetworkInterface, *v1alpha1.NetworkInterfaceList]
+	*gentype.ClientWithList[*networkv1alpha1.NetworkInterface, *networkv1alpha1.NetworkInterfaceList]
 }
 
 // newNetworkInterfaces returns a NetworkInterfaces
 func newNetworkInterfaces(c *NetworkingV1alpha1Client, namespace string) *networkInterfaces {
 	return &networkInterfaces{
-		gentype.NewClientWithList[*v1alpha1.NetworkInterface, *v1alpha1.NetworkInterfaceList](
+		gentype.NewClientWithList[*networkv1alpha1.NetworkInterface, *networkv1alpha1.NetworkInterfaceList](
 			"networkinterfaces",
 			c.RESTClient(),
 			scheme.ParameterCodec,
 			namespace,
-			func() *v1alpha1.NetworkInterface { return &v1alpha1.NetworkInterface{} },
-			func() *v1alpha1.NetworkInterfaceList { return &v1alpha1.NetworkInterfaceList{} }),
+			func() *networkv1alpha1.NetworkInterface { return &networkv1alpha1.NetworkInterface{} },
+			func() *networkv1alpha1.NetworkInterfaceList { return &networkv1alpha1.NetworkInterfaceList{} },
+		),
 	}
 }

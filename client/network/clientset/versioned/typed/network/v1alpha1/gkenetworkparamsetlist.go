@@ -19,9 +19,9 @@ limitations under the License.
 package v1alpha1
 
 import (
-	"context"
+	context "context"
 
-	v1alpha1 "github.com/GoogleCloudPlatform/gke-networking-api/apis/network/v1alpha1"
+	networkv1alpha1 "github.com/GoogleCloudPlatform/gke-networking-api/apis/network/v1alpha1"
 	scheme "github.com/GoogleCloudPlatform/gke-networking-api/client/network/clientset/versioned/scheme"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	gentype "k8s.io/client-go/gentype"
@@ -35,23 +35,24 @@ type GKENetworkParamSetListsGetter interface {
 
 // GKENetworkParamSetListInterface has methods to work with GKENetworkParamSetList resources.
 type GKENetworkParamSetListInterface interface {
-	Get(ctx context.Context, name string, opts v1.GetOptions) (*v1alpha1.GKENetworkParamSetList, error)
+	Get(ctx context.Context, name string, opts v1.GetOptions) (*networkv1alpha1.GKENetworkParamSetList, error)
 	GKENetworkParamSetListExpansion
 }
 
 // gKENetworkParamSetLists implements GKENetworkParamSetListInterface
 type gKENetworkParamSetLists struct {
-	*gentype.Client[*v1alpha1.GKENetworkParamSetList]
+	*gentype.Client[*networkv1alpha1.GKENetworkParamSetList]
 }
 
 // newGKENetworkParamSetLists returns a GKENetworkParamSetLists
 func newGKENetworkParamSetLists(c *NetworkingV1alpha1Client) *gKENetworkParamSetLists {
 	return &gKENetworkParamSetLists{
-		gentype.NewClient[*v1alpha1.GKENetworkParamSetList](
+		gentype.NewClient[*networkv1alpha1.GKENetworkParamSetList](
 			"gkenetworkparamsetlists",
 			c.RESTClient(),
 			scheme.ParameterCodec,
 			"",
-			func() *v1alpha1.GKENetworkParamSetList { return &v1alpha1.GKENetworkParamSetList{} }),
+			func() *networkv1alpha1.GKENetworkParamSetList { return &networkv1alpha1.GKENetworkParamSetList{} },
+		),
 	}
 }

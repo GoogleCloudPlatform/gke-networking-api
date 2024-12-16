@@ -19,11 +19,11 @@ limitations under the License.
 package v1
 
 import (
-	"context"
+	context "context"
 
 	networkv1 "github.com/GoogleCloudPlatform/gke-networking-api/apis/network/v1"
 	scheme "github.com/GoogleCloudPlatform/gke-networking-api/client/network/clientset/versioned/scheme"
-	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	gentype "k8s.io/client-go/gentype"
 )
 
@@ -35,7 +35,7 @@ type GKENetworkParamSetListsGetter interface {
 
 // GKENetworkParamSetListInterface has methods to work with GKENetworkParamSetList resources.
 type GKENetworkParamSetListInterface interface {
-	Get(ctx context.Context, name string, opts v1.GetOptions) (*networkv1.GKENetworkParamSetList, error)
+	Get(ctx context.Context, name string, opts metav1.GetOptions) (*networkv1.GKENetworkParamSetList, error)
 	GKENetworkParamSetListExpansion
 }
 
@@ -52,6 +52,7 @@ func newGKENetworkParamSetLists(c *NetworkingV1Client) *gKENetworkParamSetLists 
 			c.RESTClient(),
 			scheme.ParameterCodec,
 			"",
-			func() *networkv1.GKENetworkParamSetList { return &networkv1.GKENetworkParamSetList{} }),
+			func() *networkv1.GKENetworkParamSetList { return &networkv1.GKENetworkParamSetList{} },
+		),
 	}
 }
