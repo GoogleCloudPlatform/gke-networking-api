@@ -19,13 +19,13 @@ limitations under the License.
 package v1alpha1
 
 import (
-	"context"
+	context "context"
 	time "time"
 
-	networkv1alpha1 "github.com/GoogleCloudPlatform/gke-networking-api/apis/network/v1alpha1"
+	apisnetworkv1alpha1 "github.com/GoogleCloudPlatform/gke-networking-api/apis/network/v1alpha1"
 	versioned "github.com/GoogleCloudPlatform/gke-networking-api/client/network/clientset/versioned"
 	internalinterfaces "github.com/GoogleCloudPlatform/gke-networking-api/client/network/informers/externalversions/internalinterfaces"
-	v1alpha1 "github.com/GoogleCloudPlatform/gke-networking-api/client/network/listers/network/v1alpha1"
+	networkv1alpha1 "github.com/GoogleCloudPlatform/gke-networking-api/client/network/listers/network/v1alpha1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	watch "k8s.io/apimachinery/pkg/watch"
@@ -36,7 +36,7 @@ import (
 // GKENetworkParamSets.
 type GKENetworkParamSetInformer interface {
 	Informer() cache.SharedIndexInformer
-	Lister() v1alpha1.GKENetworkParamSetLister
+	Lister() networkv1alpha1.GKENetworkParamSetLister
 }
 
 type gKENetworkParamSetInformer struct {
@@ -70,7 +70,7 @@ func NewFilteredGKENetworkParamSetInformer(client versioned.Interface, resyncPer
 				return client.NetworkingV1alpha1().GKENetworkParamSets().Watch(context.TODO(), options)
 			},
 		},
-		&networkv1alpha1.GKENetworkParamSet{},
+		&apisnetworkv1alpha1.GKENetworkParamSet{},
 		resyncPeriod,
 		indexers,
 	)
@@ -81,9 +81,9 @@ func (f *gKENetworkParamSetInformer) defaultInformer(client versioned.Interface,
 }
 
 func (f *gKENetworkParamSetInformer) Informer() cache.SharedIndexInformer {
-	return f.factory.InformerFor(&networkv1alpha1.GKENetworkParamSet{}, f.defaultInformer)
+	return f.factory.InformerFor(&apisnetworkv1alpha1.GKENetworkParamSet{}, f.defaultInformer)
 }
 
-func (f *gKENetworkParamSetInformer) Lister() v1alpha1.GKENetworkParamSetLister {
-	return v1alpha1.NewGKENetworkParamSetLister(f.Informer().GetIndexer())
+func (f *gKENetworkParamSetInformer) Lister() networkv1alpha1.GKENetworkParamSetLister {
+	return networkv1alpha1.NewGKENetworkParamSetLister(f.Informer().GetIndexer())
 }

@@ -19,9 +19,9 @@ limitations under the License.
 package v1alpha1
 
 import (
-	"context"
+	context "context"
 
-	v1alpha1 "github.com/GoogleCloudPlatform/gke-networking-api/apis/network/v1alpha1"
+	networkv1alpha1 "github.com/GoogleCloudPlatform/gke-networking-api/apis/network/v1alpha1"
 	scheme "github.com/GoogleCloudPlatform/gke-networking-api/client/network/clientset/versioned/scheme"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	types "k8s.io/apimachinery/pkg/types"
@@ -37,33 +37,34 @@ type GKENetworkParamSetsGetter interface {
 
 // GKENetworkParamSetInterface has methods to work with GKENetworkParamSet resources.
 type GKENetworkParamSetInterface interface {
-	Create(ctx context.Context, gKENetworkParamSet *v1alpha1.GKENetworkParamSet, opts v1.CreateOptions) (*v1alpha1.GKENetworkParamSet, error)
-	Update(ctx context.Context, gKENetworkParamSet *v1alpha1.GKENetworkParamSet, opts v1.UpdateOptions) (*v1alpha1.GKENetworkParamSet, error)
+	Create(ctx context.Context, gKENetworkParamSet *networkv1alpha1.GKENetworkParamSet, opts v1.CreateOptions) (*networkv1alpha1.GKENetworkParamSet, error)
+	Update(ctx context.Context, gKENetworkParamSet *networkv1alpha1.GKENetworkParamSet, opts v1.UpdateOptions) (*networkv1alpha1.GKENetworkParamSet, error)
 	// Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
-	UpdateStatus(ctx context.Context, gKENetworkParamSet *v1alpha1.GKENetworkParamSet, opts v1.UpdateOptions) (*v1alpha1.GKENetworkParamSet, error)
+	UpdateStatus(ctx context.Context, gKENetworkParamSet *networkv1alpha1.GKENetworkParamSet, opts v1.UpdateOptions) (*networkv1alpha1.GKENetworkParamSet, error)
 	Delete(ctx context.Context, name string, opts v1.DeleteOptions) error
 	DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error
-	Get(ctx context.Context, name string, opts v1.GetOptions) (*v1alpha1.GKENetworkParamSet, error)
-	List(ctx context.Context, opts v1.ListOptions) (*v1alpha1.GKENetworkParamSetList, error)
+	Get(ctx context.Context, name string, opts v1.GetOptions) (*networkv1alpha1.GKENetworkParamSet, error)
+	List(ctx context.Context, opts v1.ListOptions) (*networkv1alpha1.GKENetworkParamSetList, error)
 	Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error)
-	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.GKENetworkParamSet, err error)
+	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *networkv1alpha1.GKENetworkParamSet, err error)
 	GKENetworkParamSetExpansion
 }
 
 // gKENetworkParamSets implements GKENetworkParamSetInterface
 type gKENetworkParamSets struct {
-	*gentype.ClientWithList[*v1alpha1.GKENetworkParamSet, *v1alpha1.GKENetworkParamSetList]
+	*gentype.ClientWithList[*networkv1alpha1.GKENetworkParamSet, *networkv1alpha1.GKENetworkParamSetList]
 }
 
 // newGKENetworkParamSets returns a GKENetworkParamSets
 func newGKENetworkParamSets(c *NetworkingV1alpha1Client) *gKENetworkParamSets {
 	return &gKENetworkParamSets{
-		gentype.NewClientWithList[*v1alpha1.GKENetworkParamSet, *v1alpha1.GKENetworkParamSetList](
+		gentype.NewClientWithList[*networkv1alpha1.GKENetworkParamSet, *networkv1alpha1.GKENetworkParamSetList](
 			"gkenetworkparamsets",
 			c.RESTClient(),
 			scheme.ParameterCodec,
 			"",
-			func() *v1alpha1.GKENetworkParamSet { return &v1alpha1.GKENetworkParamSet{} },
-			func() *v1alpha1.GKENetworkParamSetList { return &v1alpha1.GKENetworkParamSetList{} }),
+			func() *networkv1alpha1.GKENetworkParamSet { return &networkv1alpha1.GKENetworkParamSet{} },
+			func() *networkv1alpha1.GKENetworkParamSetList { return &networkv1alpha1.GKENetworkParamSetList{} },
+		),
 	}
 }

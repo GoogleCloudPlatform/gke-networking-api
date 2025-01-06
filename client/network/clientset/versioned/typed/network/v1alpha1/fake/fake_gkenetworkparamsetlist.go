@@ -19,29 +19,26 @@ limitations under the License.
 package fake
 
 import (
-	"context"
-
 	v1alpha1 "github.com/GoogleCloudPlatform/gke-networking-api/apis/network/v1alpha1"
-	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	testing "k8s.io/client-go/testing"
+	networkv1alpha1 "github.com/GoogleCloudPlatform/gke-networking-api/client/network/clientset/versioned/typed/network/v1alpha1"
+	gentype "k8s.io/client-go/gentype"
 )
 
-// FakeGKENetworkParamSetLists implements GKENetworkParamSetListInterface
-type FakeGKENetworkParamSetLists struct {
+// fakeGKENetworkParamSetLists implements GKENetworkParamSetListInterface
+type fakeGKENetworkParamSetLists struct {
+	*gentype.FakeClient[*v1alpha1.GKENetworkParamSetList]
 	Fake *FakeNetworkingV1alpha1
 }
 
-var gkenetworkparamsetlistsResource = v1alpha1.SchemeGroupVersion.WithResource("gkenetworkparamsetlists")
-
-var gkenetworkparamsetlistsKind = v1alpha1.SchemeGroupVersion.WithKind("GKENetworkParamSetList")
-
-// Get takes name of the gKENetworkParamSetList, and returns the corresponding gKENetworkParamSetList object, and an error if there is any.
-func (c *FakeGKENetworkParamSetLists) Get(ctx context.Context, name string, options v1.GetOptions) (result *v1alpha1.GKENetworkParamSetList, err error) {
-	emptyResult := &v1alpha1.GKENetworkParamSetList{}
-	obj, err := c.Fake.
-		Invokes(testing.NewRootGetActionWithOptions(gkenetworkparamsetlistsResource, name, options), emptyResult)
-	if obj == nil {
-		return emptyResult, err
+func newFakeGKENetworkParamSetLists(fake *FakeNetworkingV1alpha1) networkv1alpha1.GKENetworkParamSetListInterface {
+	return &fakeGKENetworkParamSetLists{
+		gentype.NewFakeClient[*v1alpha1.GKENetworkParamSetList](
+			fake.Fake,
+			"",
+			v1alpha1.SchemeGroupVersion.WithResource("gkenetworkparamsetlists"),
+			v1alpha1.SchemeGroupVersion.WithKind("GKENetworkParamSetList"),
+			func() *v1alpha1.GKENetworkParamSetList { return &v1alpha1.GKENetworkParamSetList{} },
+		),
+		fake,
 	}
-	return obj.(*v1alpha1.GKENetworkParamSetList), err
 }
