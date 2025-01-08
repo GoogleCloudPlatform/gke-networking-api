@@ -22,7 +22,6 @@ import (
 	"fmt"
 
 	v1 "github.com/GoogleCloudPlatform/gke-networking-api/apis/network/v1"
-	v1alpha1 "github.com/GoogleCloudPlatform/gke-networking-api/apis/network/v1alpha1"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"
 	cache "k8s.io/client-go/tools/cache"
 )
@@ -62,14 +61,6 @@ func (f *sharedInformerFactory) ForResource(resource schema.GroupVersionResource
 		return &genericInformer{resource: resource.GroupResource(), informer: f.Networking().V1().NetworkInterfaces().Informer()}, nil
 	case v1.SchemeGroupVersion.WithResource("subnetworks"):
 		return &genericInformer{resource: resource.GroupResource(), informer: f.Networking().V1().Subnetworks().Informer()}, nil
-
-		// Group=networking.gke.io, Version=v1alpha1
-	case v1alpha1.SchemeGroupVersion.WithResource("gkenetworkparamsets"):
-		return &genericInformer{resource: resource.GroupResource(), informer: f.Networking().V1alpha1().GKENetworkParamSets().Informer()}, nil
-	case v1alpha1.SchemeGroupVersion.WithResource("networks"):
-		return &genericInformer{resource: resource.GroupResource(), informer: f.Networking().V1alpha1().Networks().Informer()}, nil
-	case v1alpha1.SchemeGroupVersion.WithResource("networkinterfaces"):
-		return &genericInformer{resource: resource.GroupResource(), informer: f.Networking().V1alpha1().NetworkInterfaces().Informer()}, nil
 
 	}
 
