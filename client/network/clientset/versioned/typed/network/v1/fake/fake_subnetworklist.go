@@ -19,31 +19,26 @@ limitations under the License.
 package fake
 
 import (
-	"context"
-
 	v1 "github.com/GoogleCloudPlatform/gke-networking-api/apis/network/v1"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	testing "k8s.io/client-go/testing"
+	networkv1 "github.com/GoogleCloudPlatform/gke-networking-api/client/network/clientset/versioned/typed/network/v1"
+	gentype "k8s.io/client-go/gentype"
 )
 
-// FakeSubnetworkLists implements SubnetworkListInterface
-type FakeSubnetworkLists struct {
+// fakeSubnetworkLists implements SubnetworkListInterface
+type fakeSubnetworkLists struct {
+	*gentype.FakeClient[*v1.SubnetworkList]
 	Fake *FakeNetworkingV1
-	ns   string
 }
 
-var subnetworklistsResource = v1.SchemeGroupVersion.WithResource("subnetworklists")
-
-var subnetworklistsKind = v1.SchemeGroupVersion.WithKind("SubnetworkList")
-
-// Get takes name of the subnetworkList, and returns the corresponding subnetworkList object, and an error if there is any.
-func (c *FakeSubnetworkLists) Get(ctx context.Context, name string, options metav1.GetOptions) (result *v1.SubnetworkList, err error) {
-	emptyResult := &v1.SubnetworkList{}
-	obj, err := c.Fake.
-		Invokes(testing.NewGetActionWithOptions(subnetworklistsResource, c.ns, name, options), emptyResult)
-
-	if obj == nil {
-		return emptyResult, err
+func newFakeSubnetworkLists(fake *FakeNetworkingV1, namespace string) networkv1.SubnetworkListInterface {
+	return &fakeSubnetworkLists{
+		gentype.NewFakeClient[*v1.SubnetworkList](
+			fake.Fake,
+			namespace,
+			v1.SchemeGroupVersion.WithResource("subnetworklists"),
+			v1.SchemeGroupVersion.WithKind("SubnetworkList"),
+			func() *v1.SubnetworkList { return &v1.SubnetworkList{} },
+		),
+		fake,
 	}
-	return obj.(*v1.SubnetworkList), err
 }
