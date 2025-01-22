@@ -32,10 +32,6 @@ func (c *FakeNetworkingV1) GKENetworkParamSets() v1.GKENetworkParamSetInterface 
 	return newFakeGKENetworkParamSets(c)
 }
 
-func (c *FakeNetworkingV1) GKENetworkParamSetLists() v1.GKENetworkParamSetListInterface {
-	return newFakeGKENetworkParamSetLists(c)
-}
-
 func (c *FakeNetworkingV1) Networks() v1.NetworkInterface {
 	return newFakeNetworks(c)
 }
@@ -44,20 +40,8 @@ func (c *FakeNetworkingV1) NetworkInterfaces(namespace string) v1.NetworkInterfa
 	return newFakeNetworkInterfaces(c, namespace)
 }
 
-func (c *FakeNetworkingV1) NetworkInterfaceLists(namespace string) v1.NetworkInterfaceListInterface {
-	return newFakeNetworkInterfaceLists(c, namespace)
-}
-
-func (c *FakeNetworkingV1) NetworkLists() v1.NetworkListInterface {
-	return newFakeNetworkLists(c)
-}
-
 func (c *FakeNetworkingV1) Subnetworks() v1.SubnetworkInterface {
 	return newFakeSubnetworks(c)
-}
-
-func (c *FakeNetworkingV1) SubnetworkLists(namespace string) v1.SubnetworkListInterface {
-	return newFakeSubnetworkLists(c, namespace)
 }
 
 // RESTClient returns a RESTClient that is used to communicate

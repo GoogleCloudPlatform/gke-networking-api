@@ -56,8 +56,6 @@ type SubnetworkStatus struct {
 	Gateway4 *string `json:"gateway4,omitempty"`
 }
 
-// +genclient
-// +genclient:onlyVerbs=get
 // +kubebuilder:object:root=true
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
