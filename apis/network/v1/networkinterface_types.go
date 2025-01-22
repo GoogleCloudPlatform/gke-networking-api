@@ -84,8 +84,6 @@ type NetworkInterfaceStatus struct {
 	// Conditions []metav1.Condition `json:"conditions,omitempty"`
 }
 
-// +genclient
-// +genclient:onlyVerbs=get
 // +kubebuilder:object:root=true
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
