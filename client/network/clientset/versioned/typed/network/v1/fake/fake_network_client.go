@@ -29,19 +29,19 @@ type FakeNetworkingV1 struct {
 }
 
 func (c *FakeNetworkingV1) GKENetworkParamSets() v1.GKENetworkParamSetInterface {
-	return newFakeGKENetworkParamSets(c)
+	return &FakeGKENetworkParamSets{c}
 }
 
 func (c *FakeNetworkingV1) Networks() v1.NetworkInterface {
-	return newFakeNetworks(c)
+	return &FakeNetworks{c}
 }
 
 func (c *FakeNetworkingV1) NetworkInterfaces(namespace string) v1.NetworkInterfaceInterface {
-	return newFakeNetworkInterfaces(c, namespace)
+	return &FakeNetworkInterfaces{c, namespace}
 }
 
 func (c *FakeNetworkingV1) Subnetworks() v1.SubnetworkInterface {
-	return newFakeSubnetworks(c)
+	return &FakeSubnetworks{c}
 }
 
 // RESTClient returns a RESTClient that is used to communicate

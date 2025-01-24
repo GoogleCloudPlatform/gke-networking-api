@@ -19,10 +19,10 @@ limitations under the License.
 package v1
 
 import (
-	http "net/http"
+	"net/http"
 
-	nodetopologyv1 "github.com/GoogleCloudPlatform/gke-networking-api/apis/nodetopology/v1"
-	scheme "github.com/GoogleCloudPlatform/gke-networking-api/client/nodetopology/clientset/versioned/scheme"
+	v1 "github.com/GoogleCloudPlatform/gke-networking-api/apis/nodetopology/v1"
+	"github.com/GoogleCloudPlatform/gke-networking-api/client/nodetopology/clientset/versioned/scheme"
 	rest "k8s.io/client-go/rest"
 )
 
@@ -85,10 +85,10 @@ func New(c rest.Interface) *NetworkingV1Client {
 }
 
 func setConfigDefaults(config *rest.Config) error {
-	gv := nodetopologyv1.SchemeGroupVersion
+	gv := v1.SchemeGroupVersion
 	config.GroupVersion = &gv
 	config.APIPath = "/apis"
-	config.NegotiatedSerializer = rest.CodecFactoryForGeneratedClient(scheme.Scheme, scheme.Codecs).WithoutConversion()
+	config.NegotiatedSerializer = scheme.Codecs.WithoutConversion()
 
 	if config.UserAgent == "" {
 		config.UserAgent = rest.DefaultKubernetesUserAgent()
