@@ -19,13 +19,13 @@ limitations under the License.
 package v1
 
 import (
-	context "context"
+	"context"
 	time "time"
 
-	apisnodetopologyv1 "github.com/GoogleCloudPlatform/gke-networking-api/apis/nodetopology/v1"
+	nodetopologyv1 "github.com/GoogleCloudPlatform/gke-networking-api/apis/nodetopology/v1"
 	versioned "github.com/GoogleCloudPlatform/gke-networking-api/client/nodetopology/clientset/versioned"
 	internalinterfaces "github.com/GoogleCloudPlatform/gke-networking-api/client/nodetopology/informers/externalversions/internalinterfaces"
-	nodetopologyv1 "github.com/GoogleCloudPlatform/gke-networking-api/client/nodetopology/listers/nodetopology/v1"
+	v1 "github.com/GoogleCloudPlatform/gke-networking-api/client/nodetopology/listers/nodetopology/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	watch "k8s.io/apimachinery/pkg/watch"
@@ -36,7 +36,7 @@ import (
 // NodeTopologies.
 type NodeTopologyInformer interface {
 	Informer() cache.SharedIndexInformer
-	Lister() nodetopologyv1.NodeTopologyLister
+	Lister() v1.NodeTopologyLister
 }
 
 type nodeTopologyInformer struct {
@@ -70,7 +70,7 @@ func NewFilteredNodeTopologyInformer(client versioned.Interface, resyncPeriod ti
 				return client.NetworkingV1().NodeTopologies().Watch(context.TODO(), options)
 			},
 		},
-		&apisnodetopologyv1.NodeTopology{},
+		&nodetopologyv1.NodeTopology{},
 		resyncPeriod,
 		indexers,
 	)
@@ -81,9 +81,9 @@ func (f *nodeTopologyInformer) defaultInformer(client versioned.Interface, resyn
 }
 
 func (f *nodeTopologyInformer) Informer() cache.SharedIndexInformer {
-	return f.factory.InformerFor(&apisnodetopologyv1.NodeTopology{}, f.defaultInformer)
+	return f.factory.InformerFor(&nodetopologyv1.NodeTopology{}, f.defaultInformer)
 }
 
-func (f *nodeTopologyInformer) Lister() nodetopologyv1.NodeTopologyLister {
-	return nodetopologyv1.NewNodeTopologyLister(f.Informer().GetIndexer())
+func (f *nodeTopologyInformer) Lister() v1.NodeTopologyLister {
+	return v1.NewNodeTopologyLister(f.Informer().GetIndexer())
 }

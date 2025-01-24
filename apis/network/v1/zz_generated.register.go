@@ -22,14 +22,16 @@ limitations under the License.
 package v1
 
 import (
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/runtime"
+	"k8s.io/apimachinery/pkg/runtime/schema"
 )
 
 // GroupName specifies the group name used to register the objects.
 const GroupName = "networking.gke.io"
 
 // GroupVersion specifies the group and the version used to register the objects.
-var GroupVersion = metav1.GroupVersion{Group: GroupName, Version: "v1"}
+var GroupVersion = v1.GroupVersion{Group: GroupName, Version: "v1"}
 
 // SchemeGroupVersion is group version used to register these objects
 // Deprecated: use GroupVersion instead.
@@ -69,6 +71,6 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&SubnetworkList{},
 	)
 	// AddToGroupVersion allows the serialization of client types like ListOptions.
-	metav1.AddToGroupVersion(scheme, SchemeGroupVersion)
+	v1.AddToGroupVersion(scheme, SchemeGroupVersion)
 	return nil
 }

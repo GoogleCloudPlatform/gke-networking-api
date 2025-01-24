@@ -19,13 +19,13 @@ limitations under the License.
 package v1
 
 import (
-	context "context"
+	"context"
 	time "time"
 
-	apisnetworkv1 "github.com/GoogleCloudPlatform/gke-networking-api/apis/network/v1"
+	networkv1 "github.com/GoogleCloudPlatform/gke-networking-api/apis/network/v1"
 	versioned "github.com/GoogleCloudPlatform/gke-networking-api/client/network/clientset/versioned"
 	internalinterfaces "github.com/GoogleCloudPlatform/gke-networking-api/client/network/informers/externalversions/internalinterfaces"
-	networkv1 "github.com/GoogleCloudPlatform/gke-networking-api/client/network/listers/network/v1"
+	v1 "github.com/GoogleCloudPlatform/gke-networking-api/client/network/listers/network/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	watch "k8s.io/apimachinery/pkg/watch"
@@ -36,7 +36,7 @@ import (
 // GKENetworkParamSets.
 type GKENetworkParamSetInformer interface {
 	Informer() cache.SharedIndexInformer
-	Lister() networkv1.GKENetworkParamSetLister
+	Lister() v1.GKENetworkParamSetLister
 }
 
 type gKENetworkParamSetInformer struct {
@@ -70,7 +70,7 @@ func NewFilteredGKENetworkParamSetInformer(client versioned.Interface, resyncPer
 				return client.NetworkingV1().GKENetworkParamSets().Watch(context.TODO(), options)
 			},
 		},
-		&apisnetworkv1.GKENetworkParamSet{},
+		&networkv1.GKENetworkParamSet{},
 		resyncPeriod,
 		indexers,
 	)
@@ -81,9 +81,9 @@ func (f *gKENetworkParamSetInformer) defaultInformer(client versioned.Interface,
 }
 
 func (f *gKENetworkParamSetInformer) Informer() cache.SharedIndexInformer {
-	return f.factory.InformerFor(&apisnetworkv1.GKENetworkParamSet{}, f.defaultInformer)
+	return f.factory.InformerFor(&networkv1.GKENetworkParamSet{}, f.defaultInformer)
 }
 
-func (f *gKENetworkParamSetInformer) Lister() networkv1.GKENetworkParamSetLister {
-	return networkv1.NewGKENetworkParamSetLister(f.Informer().GetIndexer())
+func (f *gKENetworkParamSetInformer) Lister() v1.GKENetworkParamSetLister {
+	return v1.NewGKENetworkParamSetLister(f.Informer().GetIndexer())
 }

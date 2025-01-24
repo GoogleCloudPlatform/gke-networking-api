@@ -19,13 +19,13 @@ limitations under the License.
 package v1
 
 import (
-	context "context"
+	"context"
 	time "time"
 
-	apisnetworkv1 "github.com/GoogleCloudPlatform/gke-networking-api/apis/network/v1"
+	networkv1 "github.com/GoogleCloudPlatform/gke-networking-api/apis/network/v1"
 	versioned "github.com/GoogleCloudPlatform/gke-networking-api/client/network/clientset/versioned"
 	internalinterfaces "github.com/GoogleCloudPlatform/gke-networking-api/client/network/informers/externalversions/internalinterfaces"
-	networkv1 "github.com/GoogleCloudPlatform/gke-networking-api/client/network/listers/network/v1"
+	v1 "github.com/GoogleCloudPlatform/gke-networking-api/client/network/listers/network/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	watch "k8s.io/apimachinery/pkg/watch"
@@ -36,7 +36,7 @@ import (
 // Subnetworks.
 type SubnetworkInformer interface {
 	Informer() cache.SharedIndexInformer
-	Lister() networkv1.SubnetworkLister
+	Lister() v1.SubnetworkLister
 }
 
 type subnetworkInformer struct {
@@ -70,7 +70,7 @@ func NewFilteredSubnetworkInformer(client versioned.Interface, resyncPeriod time
 				return client.NetworkingV1().Subnetworks().Watch(context.TODO(), options)
 			},
 		},
-		&apisnetworkv1.Subnetwork{},
+		&networkv1.Subnetwork{},
 		resyncPeriod,
 		indexers,
 	)
@@ -81,9 +81,9 @@ func (f *subnetworkInformer) defaultInformer(client versioned.Interface, resyncP
 }
 
 func (f *subnetworkInformer) Informer() cache.SharedIndexInformer {
-	return f.factory.InformerFor(&apisnetworkv1.Subnetwork{}, f.defaultInformer)
+	return f.factory.InformerFor(&networkv1.Subnetwork{}, f.defaultInformer)
 }
 
-func (f *subnetworkInformer) Lister() networkv1.SubnetworkLister {
-	return networkv1.NewSubnetworkLister(f.Informer().GetIndexer())
+func (f *subnetworkInformer) Lister() v1.SubnetworkLister {
+	return v1.NewSubnetworkLister(f.Informer().GetIndexer())
 }
