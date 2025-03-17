@@ -24,6 +24,8 @@ import (
 type Protocol string
 
 // CIDR defines a IP block.
+// +kubebuilder:validation:XValidation:message="Please provide valid IPv4 or IPv6 CIDR value",rule="isIP(self) || isCIDR(self)"
+// +kubebuilder:validation:MaxLength=64
 type CIDR string
 
 // +genclient
