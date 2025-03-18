@@ -24,8 +24,8 @@ import (
 type Protocol string
 
 // CIDR defines a IP block.
-// TODO(sugangli) Modify the validation to include IPv6 CIDRs with FW 3.0 support.
-// +kubebuilder:validation:Pattern=`^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(/(3[0-2]|2[0-9]|1[0-9]|[0-9]))?$`
+// +kubebuilder:validation:XValidation:message="Please provide valid IPv4 or IPv6 CIDR value",rule="isIP(self) || isCIDR(self)"
+// +kubebuilder:validation:MaxLength=64
 type CIDR string
 
 // +genclient
