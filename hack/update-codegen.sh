@@ -21,10 +21,12 @@ readonly SCRIPT_ROOT=$(cd $(dirname ${BASH_SOURCE})/.. && pwd)
 echo "SCRIPT_ROOT ${SCRIPT_ROOT}"
 cd ${SCRIPT_ROOT}
 
+
 readonly GOFLAGS="-mod=mod"
 readonly GOPATH="$(mktemp -d)"
+readonly CONTROLLER_TOOLS_VERSION=v0.16.5
 
-export GOFLAGS GOPATH
+export GOFLAGS GOPATH CONTROLLER_TOOLS_VERSION
 
 # Even when modules are enabled, the code-generator tools always write to
 # a traditional GOPATH directory, so fake on up to point to the current
@@ -51,7 +53,7 @@ for crd in "network" "gcpfirewall" "nodetopology"; do
       "${SCRIPT_ROOT}/apis"
 
   echo "Generating $crd CRD artifacts"
-  go run sigs.k8s.io/controller-tools/cmd/controller-gen crd \
+  go run sigs.k8s.io/controller-tools/cmd/controller-gen@${CONTROLLER_TOOLS_VERSION} crd \
     object:headerFile="${SCRIPT_ROOT}/hack/boilerplate.go.txt" \
     paths="${SCRIPT_ROOT}/apis/$crd/..." \
     output:crd:dir="${SCRIPT_ROOT}/config/crds"
