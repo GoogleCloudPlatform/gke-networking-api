@@ -146,8 +146,6 @@ type FQDNNetworkPolicyPort struct {
 	Port *int32 `json:"port,omitempty"`
 }
 
-// +genclient
-// +genclient:onlyVerbs=get
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
 // FQDNNetworkPolicyList contains a list of FQDNNetworkPolicy resources.

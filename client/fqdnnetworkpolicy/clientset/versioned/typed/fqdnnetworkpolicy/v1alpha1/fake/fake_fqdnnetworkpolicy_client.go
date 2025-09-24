@@ -32,10 +32,6 @@ func (c *FakeNetworkingV1alpha1) FQDNNetworkPolicies(namespace string) v1alpha1.
 	return &FakeFQDNNetworkPolicies{c, namespace}
 }
 
-func (c *FakeNetworkingV1alpha1) FQDNNetworkPolicyLists(namespace string) v1alpha1.FQDNNetworkPolicyListInterface {
-	return &FakeFQDNNetworkPolicyLists{c, namespace}
-}
-
 // RESTClient returns a RESTClient that is used to communicate
 // with API server by this client implementation.
 func (c *FakeNetworkingV1alpha1) RESTClient() rest.Interface {
