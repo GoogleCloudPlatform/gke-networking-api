@@ -29,7 +29,6 @@ import (
 type NetworkingV1alpha1Interface interface {
 	RESTClient() rest.Interface
 	FQDNNetworkPoliciesGetter
-	FQDNNetworkPolicyListsGetter
 }
 
 // NetworkingV1alpha1Client is used to interact with features provided by the networking.gke.io group.
@@ -39,10 +38,6 @@ type NetworkingV1alpha1Client struct {
 
 func (c *NetworkingV1alpha1Client) FQDNNetworkPolicies(namespace string) FQDNNetworkPolicyInterface {
 	return newFQDNNetworkPolicies(c, namespace)
-}
-
-func (c *NetworkingV1alpha1Client) FQDNNetworkPolicyLists(namespace string) FQDNNetworkPolicyListInterface {
-	return newFQDNNetworkPolicyLists(c, namespace)
 }
 
 // NewForConfig creates a new NetworkingV1alpha1Client for the given config.
