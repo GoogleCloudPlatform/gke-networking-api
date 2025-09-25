@@ -16,7 +16,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.16.5
+    controller-gen.kubebuilder.io/version: v0.19.0
   name: fqdnnetworkpolicies.networking.gke.io
 spec:
   group: networking.gke.io
@@ -131,6 +131,7 @@ spec:
                         type: object
                       minItems: 1
                       type: array
+                      x-kubernetes-list-type: atomic
                     ports:
                       description: |-
                         Ports specifies the destination L4 port and protocol allowed to
@@ -162,11 +163,13 @@ spec:
                             type: string
                         type: object
                       type: array
+                      x-kubernetes-list-type: atomic
                   required:
                   - matches
                   type: object
                 minItems: 1
                 type: array
+                x-kubernetes-list-type: atomic
               podSelector:
                 description: |-
                   PodSelector defines which workloads are selected by the Policy.

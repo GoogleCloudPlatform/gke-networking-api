@@ -16,7 +16,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.16.5
+    controller-gen.kubebuilder.io/version: v0.19.0
   name: gcpfirewalls.networking.gke.io
 spec:
   group: networking.gke.io
@@ -106,6 +106,7 @@ spec:
                         maxItems: 256
                         minItems: 1
                         type: array
+                        x-kubernetes-list-type: atomic
                     type: object
                   source:
                     description: Source describes a peer to allow traffic from.
@@ -127,6 +128,7 @@ spec:
                         maxItems: 256
                         minItems: 1
                         type: array
+                        x-kubernetes-list-type: atomic
                     type: object
                 type: object
               ports:
@@ -172,6 +174,7 @@ spec:
                   - protocol
                   type: object
                 type: array
+                x-kubernetes-list-type: atomic
             type: object
           status:
             default:
