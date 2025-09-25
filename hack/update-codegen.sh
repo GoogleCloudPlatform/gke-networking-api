@@ -40,7 +40,7 @@ source "${SCRIPT_ROOT}/hack/kube_codegen.sh"
 
 THIS_PKG="github.com/GoogleCloudPlatform/gke-networking-api"
 
-for crd in "network" "gcpfirewall" "nodetopology" "fqdnnetworkpolicy"; do
+for crd in "network" "gcpfirewall" "nodetopology" "fqdnnetworkpolicy" "serviceloadbalancerstatus"; do
   echo "Generating $crd CRD client"
   kube::codegen::gen_client \
       --with-watch \
@@ -65,18 +65,27 @@ done
   # and then install with forced module mode on and fully qualified name.
   cd "$(dirname "${0}")"
   GO111MODULE=on go install k8s.io/code-generator/cmd/register-gen
+  GO111MODULE=on go install k8s.io/kube-openapi/cmd/openapi-gen
 )
 
 # Go installs the above commands to get installed in $GOBIN if defined, and $GOPATH/bin otherwise:
 GOBIN="$(go env GOBIN)"
 gobin="${GOBIN:-$(go env GOPATH)/bin}"
 
-for crd_with_version in "network/v1" "gcpfirewall/v1" "nodetopology/v1" "fqdnnetworkpolicy/v1alpha1"; do
+for crd_with_version in "network/v1" "gcpfirewall/v1" "nodetopology/v1" "fqdnnetworkpolicy/v1alpha1" "serviceloadbalancerstatus/v1"; do
   echo "Generating register for CRD $crd_with_version"
   "${gobin}/register-gen" \
       "${SCRIPT_ROOT}/apis/$crd_with_version" \
       --go-header-file "${SCRIPT_ROOT}/hack/boilerplate.go.txt" \
       --output-file zz_generated.register.go
+
+  echo "Generating openapi for CRD $crd_with_version"
+  "${gobin}/openapi-gen" \
+      --output-pkg "${THIS_PKG}/apis/${crd_with_version}" \
+      --output-file "zz_generated.openapi.go" \
+      --output-dir "${SCRIPT_ROOT}/apis/${crd_with_version}" \
+      --go-header-file "${SCRIPT_ROOT}/hack/boilerplate.go.txt" \
+      "${THIS_PKG}/apis/${crd_with_version}"
 done
 
 # controller-gen doesn't currently generate YAML boilerplate.
