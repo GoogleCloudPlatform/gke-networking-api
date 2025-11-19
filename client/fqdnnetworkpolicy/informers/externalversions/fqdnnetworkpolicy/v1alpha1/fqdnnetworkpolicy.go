@@ -19,13 +19,13 @@ limitations under the License.
 package v1alpha1
 
 import (
-	"context"
+	context "context"
 	time "time"
 
-	fqdnnetworkpolicyv1alpha1 "github.com/GoogleCloudPlatform/gke-networking-api/apis/fqdnnetworkpolicy/v1alpha1"
+	apisfqdnnetworkpolicyv1alpha1 "github.com/GoogleCloudPlatform/gke-networking-api/apis/fqdnnetworkpolicy/v1alpha1"
 	versioned "github.com/GoogleCloudPlatform/gke-networking-api/client/fqdnnetworkpolicy/clientset/versioned"
 	internalinterfaces "github.com/GoogleCloudPlatform/gke-networking-api/client/fqdnnetworkpolicy/informers/externalversions/internalinterfaces"
-	v1alpha1 "github.com/GoogleCloudPlatform/gke-networking-api/client/fqdnnetworkpolicy/listers/fqdnnetworkpolicy/v1alpha1"
+	fqdnnetworkpolicyv1alpha1 "github.com/GoogleCloudPlatform/gke-networking-api/client/fqdnnetworkpolicy/listers/fqdnnetworkpolicy/v1alpha1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	watch "k8s.io/apimachinery/pkg/watch"
@@ -36,7 +36,7 @@ import (
 // FQDNNetworkPolicies.
 type FQDNNetworkPolicyInformer interface {
 	Informer() cache.SharedIndexInformer
-	Lister() v1alpha1.FQDNNetworkPolicyLister
+	Lister() fqdnnetworkpolicyv1alpha1.FQDNNetworkPolicyLister
 }
 
 type fQDNNetworkPolicyInformer struct {
@@ -62,16 +62,28 @@ func NewFilteredFQDNNetworkPolicyInformer(client versioned.Interface, namespace 
 				if tweakListOptions != nil {
 					tweakListOptions(&options)
 				}
-				return client.NetworkingV1alpha1().FQDNNetworkPolicies(namespace).List(context.TODO(), options)
+				return client.NetworkingV1alpha1().FQDNNetworkPolicies(namespace).List(context.Background(), options)
 			},
 			WatchFunc: func(options v1.ListOptions) (watch.Interface, error) {
 				if tweakListOptions != nil {
 					tweakListOptions(&options)
 				}
-				return client.NetworkingV1alpha1().FQDNNetworkPolicies(namespace).Watch(context.TODO(), options)
+				return client.NetworkingV1alpha1().FQDNNetworkPolicies(namespace).Watch(context.Background(), options)
+			},
+			ListWithContextFunc: func(ctx context.Context, options v1.ListOptions) (runtime.Object, error) {
+				if tweakListOptions != nil {
+					tweakListOptions(&options)
+				}
+				return client.NetworkingV1alpha1().FQDNNetworkPolicies(namespace).List(ctx, options)
+			},
+			WatchFuncWithContext: func(ctx context.Context, options v1.ListOptions) (watch.Interface, error) {
+				if tweakListOptions != nil {
+					tweakListOptions(&options)
+				}
+				return client.NetworkingV1alpha1().FQDNNetworkPolicies(namespace).Watch(ctx, options)
 			},
 		},
-		&fqdnnetworkpolicyv1alpha1.FQDNNetworkPolicy{},
+		&apisfqdnnetworkpolicyv1alpha1.FQDNNetworkPolicy{},
 		resyncPeriod,
 		indexers,
 	)
@@ -82,9 +94,9 @@ func (f *fQDNNetworkPolicyInformer) defaultInformer(client versioned.Interface, 
 }
 
 func (f *fQDNNetworkPolicyInformer) Informer() cache.SharedIndexInformer {
-	return f.factory.InformerFor(&fqdnnetworkpolicyv1alpha1.FQDNNetworkPolicy{}, f.defaultInformer)
+	return f.factory.InformerFor(&apisfqdnnetworkpolicyv1alpha1.FQDNNetworkPolicy{}, f.defaultInformer)
 }
 
-func (f *fQDNNetworkPolicyInformer) Lister() v1alpha1.FQDNNetworkPolicyLister {
-	return v1alpha1.NewFQDNNetworkPolicyLister(f.Informer().GetIndexer())
+func (f *fQDNNetworkPolicyInformer) Lister() fqdnnetworkpolicyv1alpha1.FQDNNetworkPolicyLister {
+	return fqdnnetworkpolicyv1alpha1.NewFQDNNetworkPolicyLister(f.Informer().GetIndexer())
 }
