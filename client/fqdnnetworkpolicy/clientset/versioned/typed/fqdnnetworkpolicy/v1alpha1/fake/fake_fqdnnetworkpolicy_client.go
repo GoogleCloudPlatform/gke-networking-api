@@ -29,7 +29,7 @@ type FakeNetworkingV1alpha1 struct {
 }
 
 func (c *FakeNetworkingV1alpha1) FQDNNetworkPolicies(namespace string) v1alpha1.FQDNNetworkPolicyInterface {
-	return &FakeFQDNNetworkPolicies{c, namespace}
+	return newFakeFQDNNetworkPolicies(c, namespace)
 }
 
 // RESTClient returns a RESTClient that is used to communicate
