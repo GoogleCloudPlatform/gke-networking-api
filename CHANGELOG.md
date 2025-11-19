@@ -6,6 +6,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.3.0]
+
+### Added
+
+- Introduced `FQDNNetworkPolicy` API. For more information,
+  see <https://cloud.google.com/kubernetes-engine/docs/how-to/fqdn-network-policies>.
+- Introduced `Subnetwork` API.
+
+### Changed
+
+- `Network` API is now GA.
+
+### Removed
+
+- `Network` v1alpha1 APIs.
+
 ## [0.2.0]
 
 ### Added
@@ -35,7 +51,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - CRD generation scripts were updated to use the `kube_generator`
   script istead of the deprecated `generate_group` script.
 
-[Unreleased]: https://github.com/GoogleCloudPlatform/gke-networking-api/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/GoogleCloudPlatform/gke-networking-api/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/GoogleCloudPlatform/gke-networking-api/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/GoogleCloudPlatform/gke-networking-api/compare/v0.1.1...v0.2.0
 [0.1.1]: https://github.com/GoogleCloudPlatform/gke-networking-api/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/GoogleCloudPlatform/gke-networking-api/releases/v0.1.0
