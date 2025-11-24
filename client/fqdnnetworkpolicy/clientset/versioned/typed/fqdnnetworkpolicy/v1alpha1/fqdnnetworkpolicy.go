@@ -19,9 +19,9 @@ limitations under the License.
 package v1alpha1
 
 import (
-	"context"
+	context "context"
 
-	v1alpha1 "github.com/GoogleCloudPlatform/gke-networking-api/apis/fqdnnetworkpolicy/v1alpha1"
+	fqdnnetworkpolicyv1alpha1 "github.com/GoogleCloudPlatform/gke-networking-api/apis/fqdnnetworkpolicy/v1alpha1"
 	scheme "github.com/GoogleCloudPlatform/gke-networking-api/client/fqdnnetworkpolicy/clientset/versioned/scheme"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	types "k8s.io/apimachinery/pkg/types"
@@ -37,31 +37,36 @@ type FQDNNetworkPoliciesGetter interface {
 
 // FQDNNetworkPolicyInterface has methods to work with FQDNNetworkPolicy resources.
 type FQDNNetworkPolicyInterface interface {
-	Create(ctx context.Context, fQDNNetworkPolicy *v1alpha1.FQDNNetworkPolicy, opts v1.CreateOptions) (*v1alpha1.FQDNNetworkPolicy, error)
-	Update(ctx context.Context, fQDNNetworkPolicy *v1alpha1.FQDNNetworkPolicy, opts v1.UpdateOptions) (*v1alpha1.FQDNNetworkPolicy, error)
+	Create(ctx context.Context, fQDNNetworkPolicy *fqdnnetworkpolicyv1alpha1.FQDNNetworkPolicy, opts v1.CreateOptions) (*fqdnnetworkpolicyv1alpha1.FQDNNetworkPolicy, error)
+	Update(ctx context.Context, fQDNNetworkPolicy *fqdnnetworkpolicyv1alpha1.FQDNNetworkPolicy, opts v1.UpdateOptions) (*fqdnnetworkpolicyv1alpha1.FQDNNetworkPolicy, error)
 	Delete(ctx context.Context, name string, opts v1.DeleteOptions) error
 	DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error
-	Get(ctx context.Context, name string, opts v1.GetOptions) (*v1alpha1.FQDNNetworkPolicy, error)
-	List(ctx context.Context, opts v1.ListOptions) (*v1alpha1.FQDNNetworkPolicyList, error)
+	Get(ctx context.Context, name string, opts v1.GetOptions) (*fqdnnetworkpolicyv1alpha1.FQDNNetworkPolicy, error)
+	List(ctx context.Context, opts v1.ListOptions) (*fqdnnetworkpolicyv1alpha1.FQDNNetworkPolicyList, error)
 	Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error)
-	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.FQDNNetworkPolicy, err error)
+	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *fqdnnetworkpolicyv1alpha1.FQDNNetworkPolicy, err error)
 	FQDNNetworkPolicyExpansion
 }
 
 // fQDNNetworkPolicies implements FQDNNetworkPolicyInterface
 type fQDNNetworkPolicies struct {
-	*gentype.ClientWithList[*v1alpha1.FQDNNetworkPolicy, *v1alpha1.FQDNNetworkPolicyList]
+	*gentype.ClientWithList[*fqdnnetworkpolicyv1alpha1.FQDNNetworkPolicy, *fqdnnetworkpolicyv1alpha1.FQDNNetworkPolicyList]
 }
 
 // newFQDNNetworkPolicies returns a FQDNNetworkPolicies
 func newFQDNNetworkPolicies(c *NetworkingV1alpha1Client, namespace string) *fQDNNetworkPolicies {
 	return &fQDNNetworkPolicies{
-		gentype.NewClientWithList[*v1alpha1.FQDNNetworkPolicy, *v1alpha1.FQDNNetworkPolicyList](
+		gentype.NewClientWithList[*fqdnnetworkpolicyv1alpha1.FQDNNetworkPolicy, *fqdnnetworkpolicyv1alpha1.FQDNNetworkPolicyList](
 			"fqdnnetworkpolicies",
 			c.RESTClient(),
 			scheme.ParameterCodec,
 			namespace,
-			func() *v1alpha1.FQDNNetworkPolicy { return &v1alpha1.FQDNNetworkPolicy{} },
-			func() *v1alpha1.FQDNNetworkPolicyList { return &v1alpha1.FQDNNetworkPolicyList{} }),
+			func() *fqdnnetworkpolicyv1alpha1.FQDNNetworkPolicy {
+				return &fqdnnetworkpolicyv1alpha1.FQDNNetworkPolicy{}
+			},
+			func() *fqdnnetworkpolicyv1alpha1.FQDNNetworkPolicyList {
+				return &fqdnnetworkpolicyv1alpha1.FQDNNetworkPolicyList{}
+			},
+		),
 	}
 }

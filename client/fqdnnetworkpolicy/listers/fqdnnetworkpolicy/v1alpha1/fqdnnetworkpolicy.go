@@ -19,10 +19,10 @@ limitations under the License.
 package v1alpha1
 
 import (
-	v1alpha1 "github.com/GoogleCloudPlatform/gke-networking-api/apis/fqdnnetworkpolicy/v1alpha1"
-	"k8s.io/apimachinery/pkg/labels"
-	"k8s.io/client-go/listers"
-	"k8s.io/client-go/tools/cache"
+	fqdnnetworkpolicyv1alpha1 "github.com/GoogleCloudPlatform/gke-networking-api/apis/fqdnnetworkpolicy/v1alpha1"
+	labels "k8s.io/apimachinery/pkg/labels"
+	listers "k8s.io/client-go/listers"
+	cache "k8s.io/client-go/tools/cache"
 )
 
 // FQDNNetworkPolicyLister helps list FQDNNetworkPolicies.
@@ -30,7 +30,7 @@ import (
 type FQDNNetworkPolicyLister interface {
 	// List lists all FQDNNetworkPolicies in the indexer.
 	// Objects returned here must be treated as read-only.
-	List(selector labels.Selector) (ret []*v1alpha1.FQDNNetworkPolicy, err error)
+	List(selector labels.Selector) (ret []*fqdnnetworkpolicyv1alpha1.FQDNNetworkPolicy, err error)
 	// FQDNNetworkPolicies returns an object that can list and get FQDNNetworkPolicies.
 	FQDNNetworkPolicies(namespace string) FQDNNetworkPolicyNamespaceLister
 	FQDNNetworkPolicyListerExpansion
@@ -38,17 +38,17 @@ type FQDNNetworkPolicyLister interface {
 
 // fQDNNetworkPolicyLister implements the FQDNNetworkPolicyLister interface.
 type fQDNNetworkPolicyLister struct {
-	listers.ResourceIndexer[*v1alpha1.FQDNNetworkPolicy]
+	listers.ResourceIndexer[*fqdnnetworkpolicyv1alpha1.FQDNNetworkPolicy]
 }
 
 // NewFQDNNetworkPolicyLister returns a new FQDNNetworkPolicyLister.
 func NewFQDNNetworkPolicyLister(indexer cache.Indexer) FQDNNetworkPolicyLister {
-	return &fQDNNetworkPolicyLister{listers.New[*v1alpha1.FQDNNetworkPolicy](indexer, v1alpha1.Resource("fqdnnetworkpolicy"))}
+	return &fQDNNetworkPolicyLister{listers.New[*fqdnnetworkpolicyv1alpha1.FQDNNetworkPolicy](indexer, fqdnnetworkpolicyv1alpha1.Resource("fqdnnetworkpolicy"))}
 }
 
 // FQDNNetworkPolicies returns an object that can list and get FQDNNetworkPolicies.
 func (s *fQDNNetworkPolicyLister) FQDNNetworkPolicies(namespace string) FQDNNetworkPolicyNamespaceLister {
-	return fQDNNetworkPolicyNamespaceLister{listers.NewNamespaced[*v1alpha1.FQDNNetworkPolicy](s.ResourceIndexer, namespace)}
+	return fQDNNetworkPolicyNamespaceLister{listers.NewNamespaced[*fqdnnetworkpolicyv1alpha1.FQDNNetworkPolicy](s.ResourceIndexer, namespace)}
 }
 
 // FQDNNetworkPolicyNamespaceLister helps list and get FQDNNetworkPolicies.
@@ -56,15 +56,15 @@ func (s *fQDNNetworkPolicyLister) FQDNNetworkPolicies(namespace string) FQDNNetw
 type FQDNNetworkPolicyNamespaceLister interface {
 	// List lists all FQDNNetworkPolicies in the indexer for a given namespace.
 	// Objects returned here must be treated as read-only.
-	List(selector labels.Selector) (ret []*v1alpha1.FQDNNetworkPolicy, err error)
+	List(selector labels.Selector) (ret []*fqdnnetworkpolicyv1alpha1.FQDNNetworkPolicy, err error)
 	// Get retrieves the FQDNNetworkPolicy from the indexer for a given namespace and name.
 	// Objects returned here must be treated as read-only.
-	Get(name string) (*v1alpha1.FQDNNetworkPolicy, error)
+	Get(name string) (*fqdnnetworkpolicyv1alpha1.FQDNNetworkPolicy, error)
 	FQDNNetworkPolicyNamespaceListerExpansion
 }
 
 // fQDNNetworkPolicyNamespaceLister implements the FQDNNetworkPolicyNamespaceLister
 // interface.
 type fQDNNetworkPolicyNamespaceLister struct {
-	listers.ResourceIndexer[*v1alpha1.FQDNNetworkPolicy]
+	listers.ResourceIndexer[*fqdnnetworkpolicyv1alpha1.FQDNNetworkPolicy]
 }
