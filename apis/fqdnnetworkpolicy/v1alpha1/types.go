@@ -31,6 +31,7 @@ import (
 // FQDNNetworkPolicy works additively with Kubernetes Network Policies.
 // Traffic matching either a Kubernetes NetworkPolicy or a FQDNNetworkPolicy
 // will be allowed to egress the workload.
+// +k8s:openapi-gen=true
 type FQDNNetworkPolicy struct {
 	v1.TypeMeta   `json:",inline"`
 	v1.ObjectMeta `json:"metadata,omitempty"`
@@ -39,6 +40,7 @@ type FQDNNetworkPolicy struct {
 	Spec FQDNNetworkPolicySpec `json:"spec"`
 }
 
+// +k8s:openapi-gen=true
 type FQDNNetworkPolicySpec struct {
 	// PodSelector defines which workloads are selected by the Policy.
 	// An empty PodSelector selects all pods in the namespace.
@@ -53,18 +55,21 @@ type FQDNNetworkPolicySpec struct {
 	// entry.
 	//
 	// +kubebuilder:validation:MinItems=1
+	// +listType=atomic
 	Egress []FQDNNetworkPolicyEgressRule `json:"egress"`
 }
 
 // FQDNNetworkPolicyEgressRule identifies a set of endpoints traffic is allowed
 // to. The exact L4 endpoints are constructed as a cross-product between the
 // matches and ports lists.
+// +k8s:openapi-gen=true
 type FQDNNetworkPolicyEgressRule struct {
 	// Matches specifies the FQDN peers to which egress traffic is allowed.
 	// Matches may not be missing or empty - it must contain at least 1
 	// entry.
 	//
 	// +kubebuilder:validation:MinItems=1
+	// +listType=atomic
 	Matches []FQDNNetworkPolicyMatch `json:"matches"`
 
 	// Ports specifies the destination L4 port and protocol allowed to
@@ -72,6 +77,7 @@ type FQDNNetworkPolicyEgressRule struct {
 	// If ports is missing or empty, all ports and protocols are allowed.
 	//
 	// +optional
+	// +listType=atomic
 	Ports []FQDNNetworkPolicyPort `json:"ports,omitempty"`
 }
 
@@ -82,6 +88,7 @@ type FQDNNetworkPolicyEgressRule struct {
 //
 // +kubebuilder:validation:MinProperties=1
 // +kubebuilder:validation:MaxProperties=1
+// +k8s:openapi-gen=true
 type FQDNNetworkPolicyMatch struct {
 	// Name specifies the literal FQDN to match. If this is specified,
 	// no other match types may be specified in the same struct.
@@ -126,6 +133,7 @@ type FQDNNetworkPolicyMatch struct {
 
 // FQDNNetworkPolicyPort specifies which remote port and protocol is a valid
 // peer of the selected pod.
+// +k8s:openapi-gen=true
 type FQDNNetworkPolicyPort struct {
 	// Protocol is the L4 protocol. Valid options are "TCP", "UDP",
 	// or "ALL".
