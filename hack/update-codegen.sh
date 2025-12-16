@@ -40,7 +40,7 @@ source "${SCRIPT_ROOT}/hack/kube_codegen.sh"
 
 THIS_PKG="github.com/GoogleCloudPlatform/gke-networking-api"
 
-for crd in "network" "gcpfirewall" "nodetopology" "fqdnnetworkpolicy"; do
+for crd in "network" "gcpfirewall" "nodetopology" "fqdnnetworkpolicy" "dependantresources"; do
   echo "Generating $crd CRD client"
   kube::codegen::gen_client \
       --with-watch \
@@ -72,16 +72,24 @@ done
 GOBIN="$(go env GOBIN)"
 gobin="${GOBIN:-$(go env GOPATH)/bin}"
 
-for crd_with_version in "network/v1" "gcpfirewall/v1" "nodetopology/v1" "fqdnnetworkpolicy/v1alpha1"; do
+for crd_with_version in "network/v1" "gcpfirewall/v1" "nodetopology/v1" "fqdnnetworkpolicy/v1alpha1" "dependantresources/v1"; do
   echo "Generating register for CRD $crd_with_version"
   "${gobin}/register-gen" \
       "${SCRIPT_ROOT}/apis/$crd_with_version" \
       --go-header-file "${SCRIPT_ROOT}/hack/boilerplate.go.txt" \
       --output-file zz_generated.register.go
+
+  echo "Generating openapi for CRD $crd_with_version"
+  "${gobin}/openapi-gen" \
+      --output-pkg "${THIS_PKG}/apis/${crd_with_version}" \
+      --output-file "zz_generated.openapi.go" \
+      --output-dir "${SCRIPT_ROOT}/apis/${crd_with_version}" \
+      --go-header-file "${SCRIPT_ROOT}/hack/boilerplate.go.txt" \
+      "${THIS_PKG}/apis/${crd_with_version}"
 done
 
 
-for crd_with_version in "gcpfirewall/v1" "nodetopology/v1" "fqdnnetworkpolicy/v1alpha1"; do
+for crd_with_version in "gcpfirewall/v1" "nodetopology/v1" "fqdnnetworkpolicy/v1alpha1" "dependantresources/v1"; do
   echo "Generating openapi for CRD $crd_with_version"
   "${gobin}/openapi-gen" \
       --output-pkg "${THIS_PKG}/apis/${crd_with_version}" \
