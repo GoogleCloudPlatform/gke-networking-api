@@ -212,6 +212,14 @@ func TestParseNorthInterfacesAnnotation(t *testing.T) {
 			},
 			expected: `[{"network":"network-a","ipAddress":"10.0.0.1"},{"network":"network-b","ipAddress":"20.0.0.1"}]`,
 		},
+		{
+			name: "list with dual-stack and ipv6 items",
+			input: NorthInterfacesAnnotation{
+				{Network: "network-a", IpAddress: "10.0.0.1", IPv6Address: "2001:db8::1"},
+				{Network: "network-b", IPv6Address: "2001:db8::2"},
+			},
+			expected: `[{"network":"network-a","ipAddress":"10.0.0.1","ipv6Address":"2001:db8::1"},{"network":"network-b","ipv6Address":"2001:db8::2"}]`,
+		},
 	}
 
 	for _, tc := range tests {
