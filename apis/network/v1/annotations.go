@@ -159,8 +159,11 @@ type PodIP struct {
 	// NetworkName refers to the network object associated with this IP.
 	NetworkName string `json:"networkName"`
 
-	// IP is an IP address (IPv4 or IPv6) assigned to the pod.
-	IP string `json:"ip"`
+	// IP is an IPv4 address assigned to the pod.
+	IP string `json:"ip,omitempty"`
+
+	// IPv6 is an IPv6 address assigned to the pod.
+	IPv6 string `json:"ipv6,omitempty"`
 }
 
 // NodeNetwork specifies network data on a node.

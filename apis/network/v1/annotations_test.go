@@ -60,6 +60,14 @@ func TestPodIPsAnnotation(t *testing.T) {
 			},
 			expected: `[{"networkName":"network-a","ip":"198.51.100.0"},{"networkName":"network-b","ip":"2001:db8::"}]`,
 		},
+		{
+			name: "dual-stack and ipv6 pod IPs",
+			input: PodIPsAnnotation{
+				{NetworkName: "network-a", IP: "198.51.100.10", IPv6: "2001:db8::10"},
+				{NetworkName: "network-b", IPv6: "2001:db8::20"},
+			},
+			expected: `[{"networkName":"network-a","ip":"198.51.100.10","ipv6":"2001:db8::10"},{"networkName":"network-b","ipv6":"2001:db8::20"}]`,
+		},
 	}
 
 	for _, tc := range tests {
