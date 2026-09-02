@@ -97,6 +97,8 @@ type NICInfoAnnotation []NICInfoRef
 type NICInfoRef struct {
 	// First IP address of the interface.
 	BirthIP string `json:"birthIP,omitempty"`
+	// BirthIPv6 is the primary IPv6 address assigned to this interface at node boot time.
+	BirthIPv6 string `json:"birthIPv6,omitempty"`
 	// PCI address of this device on the node.
 	PCIAddress string `json:"pciAddress,omitempty"`
 	// Name is the birth name of this interface at node boot time.
