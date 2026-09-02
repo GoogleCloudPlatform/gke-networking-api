@@ -260,6 +260,14 @@ func TestParseNICInfoAnnotation(t *testing.T) {
 			},
 			expected: `[{"birthIP":"10.0.0.1","pciAddress":"0000:00:05.0","birthName":"eth1"},{"birthIP":"20.0.0.1","pciAddress":"0000:00:06.0","birthName":"eth2"}]`,
 		},
+		{
+			name: "list with dual-stack and ipv6 items",
+			input: NICInfoAnnotation{
+				{BirthIP: "10.0.0.1", BirthIPv6: "2001:db8::1", PCIAddress: "0000:00:05.0", BirthName: "eth1"},
+				{BirthIPv6: "2001:db8::2", PCIAddress: "0000:00:06.0", BirthName: "eth2"},
+			},
+			expected: `[{"birthIP":"10.0.0.1","birthIPv6":"2001:db8::1","pciAddress":"0000:00:05.0","birthName":"eth1"},{"birthIPv6":"2001:db8::2","pciAddress":"0000:00:06.0","birthName":"eth2"}]`,
+		},
 	}
 
 	for _, tc := range tests {
