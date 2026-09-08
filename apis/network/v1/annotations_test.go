@@ -340,6 +340,49 @@ func TestInterfaceStatusAnnotation(t *testing.T) {
 			expected: `[{"networkName":"network","ipAddresses":["1.2.3.4","ff::01"],"macAddress":"aa:bb:cc:dd:ee","routes":[{"to":"10.0.0.0/24"}],"gateway4":"10.0.0.1","dnsConfig":{"nameservers":["8.8.8.8"],"searches":["a.domain"]},"dhcpServerIP":"10.0.0.2"}]`,
 		},
 		{
+			name: "dual-stack status with gateway6",
+			input: InterfaceStatusAnnotation{
+				InterfaceStatus{
+					NetworkName: "network",
+					IPAddresses: []string{"1.2.3.4/32", "2001:db8::10/128"},
+					MACAddress:  "aa:bb:cc:dd:ee:ff",
+					Routes: []Route{
+						{To: "10.0.0.0/24"},
+						{To: "2001:db8::/64"},
+					},
+					Gateway4: ptr.To("10.0.0.1"),
+					Gateway6: ptr.To("2001:db8::1"),
+					DNSConfig: &DNSConfig{
+						Nameservers: []string{"8.8.8.8", "2001:4860:4860::8888"},
+						Searches:    []string{"a.domain"},
+					},
+					DHCPServerIP: ptr.To("10.0.0.2"),
+				},
+			},
+			expected: `[{"networkName":"network","ipAddresses":["1.2.3.4/32","2001:db8::10/128"],"macAddress":"aa:bb:cc:dd:ee:ff","routes":[{"to":"10.0.0.0/24"},{"to":"2001:db8::/64"}],"gateway4":"10.0.0.1","gateway6":"2001:db8::1","dnsConfig":{"nameservers":["8.8.8.8","2001:4860:4860::8888"],"searches":["a.domain"]},"dhcpServerIP":"10.0.0.2"}]`,
+		},
+		{
+			// Gateway4 and DHCPServerIP are intentionally left nil to verify that
+			// they are omitted entirely on an IPv6-only network.
+			name: "ipv6-only status with gateway6",
+			input: InterfaceStatusAnnotation{
+				InterfaceStatus{
+					NetworkName: "network",
+					IPAddresses: []string{"2001:db8::10/128"},
+					MACAddress:  "aa:bb:cc:dd:ee:ff",
+					Routes: []Route{
+						{To: "2001:db8::/64"},
+					},
+					Gateway6: ptr.To("2001:db8::1"),
+					DNSConfig: &DNSConfig{
+						Nameservers: []string{"2001:4860:4860::8888"},
+						Searches:    []string{"a.domain"},
+					},
+				},
+			},
+			expected: `[{"networkName":"network","ipAddresses":["2001:db8::10/128"],"macAddress":"aa:bb:cc:dd:ee:ff","routes":[{"to":"2001:db8::/64"}],"gateway6":"2001:db8::1","dnsConfig":{"nameservers":["2001:4860:4860::8888"],"searches":["a.domain"]}}]`,
+		},
+		{
 			name: "multiple interfaces",
 			input: InterfaceStatusAnnotation{
 				InterfaceStatus{
