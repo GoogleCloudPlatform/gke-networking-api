@@ -146,6 +146,14 @@ spec:
                     network:
                       description: Network is the name of the network.
                       type: string
+                    type:
+                      default: Reusable
+                      description: Type is the type of the pod CIDR. The default is
+                        "Reusable".
+                      enum:
+                      - Reusable
+                      - NonReusable
+                      type: string
                   required:
                   - cidr
                   - id
@@ -289,6 +297,14 @@ spec:
                       type: string
                     network:
                       description: Network is the name of the network.
+                      type: string
+                    type:
+                      default: Reusable
+                      description: Type is the type of the pod CIDR. The default is
+                        "Reusable".
+                      enum:
+                      - Reusable
+                      - NonReusable
                       type: string
                   required:
                   - cidr
