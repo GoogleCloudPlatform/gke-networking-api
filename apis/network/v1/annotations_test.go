@@ -321,19 +321,19 @@ func TestInterfaceStatusAnnotation(t *testing.T) {
 			input: InterfaceStatusAnnotation{
 				InterfaceStatus{
 					NetworkName: "network",
-					IPAddresses: []string{"1.2.3.4"},
-					MACAddress:  "aa:bb:cc:dd:ee",
+					IPAddresses: []string{"1.2.3.4/32"},
+					MACAddress:  "aa:bb:cc:dd:ee:ff",
 				},
 			},
-			expected: `[{"networkName":"network","ipAddresses":["1.2.3.4"],"macAddress":"aa:bb:cc:dd:ee"}]`,
+			expected: `[{"networkName":"network","ipAddresses":["1.2.3.4/32"],"macAddress":"aa:bb:cc:dd:ee:ff"}]`,
 		},
 		{
 			name: "max status",
 			input: InterfaceStatusAnnotation{
 				InterfaceStatus{
 					NetworkName: "network",
-					IPAddresses: []string{"1.2.3.4", "ff::01"},
-					MACAddress:  "aa:bb:cc:dd:ee",
+					IPAddresses: []string{"1.2.3.4/32", "ff::01/128"},
+					MACAddress:  "aa:bb:cc:dd:ee:ff",
 					Routes: []Route{
 						{To: "10.0.0.0/24"},
 					},
@@ -345,7 +345,7 @@ func TestInterfaceStatusAnnotation(t *testing.T) {
 					DHCPServerIP: ptr.To("10.0.0.2"),
 				},
 			},
-			expected: `[{"networkName":"network","ipAddresses":["1.2.3.4","ff::01"],"macAddress":"aa:bb:cc:dd:ee","routes":[{"to":"10.0.0.0/24"}],"gateway4":"10.0.0.1","dnsConfig":{"nameservers":["8.8.8.8"],"searches":["a.domain"]},"dhcpServerIP":"10.0.0.2"}]`,
+			expected: `[{"networkName":"network","ipAddresses":["1.2.3.4/32","ff::01/128"],"macAddress":"aa:bb:cc:dd:ee:ff","routes":[{"to":"10.0.0.0/24"}],"gateway4":"10.0.0.1","dnsConfig":{"nameservers":["8.8.8.8"],"searches":["a.domain"]},"dhcpServerIP":"10.0.0.2"}]`,
 		},
 		{
 			name: "dual-stack status with gateway6",
@@ -395,13 +395,13 @@ func TestInterfaceStatusAnnotation(t *testing.T) {
 			input: InterfaceStatusAnnotation{
 				InterfaceStatus{
 					NetworkName: "network",
-					IPAddresses: []string{"1.2.3.4"},
-					MACAddress:  "aa:bb:cc:dd:ee",
+					IPAddresses: []string{"1.2.3.4/32"},
+					MACAddress:  "aa:bb:cc:dd:ee:ff",
 				},
 				InterfaceStatus{
 					NetworkName: "network-2",
-					IPAddresses: []string{"1.2.3.5", "ff::01"},
-					MACAddress:  "aa:bb:cc:dd:ff",
+					IPAddresses: []string{"1.2.3.5/32", "ff::01/128"},
+					MACAddress:  "aa:bb:cc:dd:ff:00",
 					Routes: []Route{
 						{To: "10.0.0.0/24"},
 					},
@@ -413,7 +413,7 @@ func TestInterfaceStatusAnnotation(t *testing.T) {
 					DHCPServerIP: ptr.To("10.0.0.2"),
 				},
 			},
-			expected: `[{"networkName":"network","ipAddresses":["1.2.3.4"],"macAddress":"aa:bb:cc:dd:ee"},{"networkName":"network-2","ipAddresses":["1.2.3.5","ff::01"],"macAddress":"aa:bb:cc:dd:ff","routes":[{"to":"10.0.0.0/24"}],"gateway4":"10.0.0.1","dnsConfig":{"nameservers":["8.8.8.8"],"searches":["a.domain"]},"dhcpServerIP":"10.0.0.2"}]`,
+			expected: `[{"networkName":"network","ipAddresses":["1.2.3.4/32"],"macAddress":"aa:bb:cc:dd:ee:ff"},{"networkName":"network-2","ipAddresses":["1.2.3.5/32","ff::01/128"],"macAddress":"aa:bb:cc:dd:ff:00","routes":[{"to":"10.0.0.0/24"}],"gateway4":"10.0.0.1","dnsConfig":{"nameservers":["8.8.8.8"],"searches":["a.domain"]},"dhcpServerIP":"10.0.0.2"}]`,
 		},
 	}
 
