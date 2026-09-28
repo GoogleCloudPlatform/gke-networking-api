@@ -84,10 +84,10 @@ type PodCIDR struct {
 	// +required
 	CIDR string `json:"cidr"`
 
-	// Type is the type of the pod CIDR. The default is "Reusable".
+	// ReusePolicy is the reuse policy of the pod CIDR. The default is "Reusable".
 	// +optional
 	// +kubebuilder:default="Reusable"
-	Type PodCIDRType `json:"type,omitempty"`
+	ReusePolicy PodCIDRType `json:"reusePolicy,omitempty"`
 
 	// Condition contains details for the current condition of this pod CIDR.
 	// +optional

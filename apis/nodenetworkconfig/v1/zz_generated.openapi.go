@@ -259,9 +259,9 @@ func schema_gke_networking_api_apis_nodenetworkconfig_v1_PodCIDR(ref common.Refe
 							Format:      "",
 						},
 					},
-					"type": {
+					"reusePolicy": {
 						SchemaProps: spec.SchemaProps{
-							Description: "Type is the type of the pod CIDR. The default is \"Reusable\".",
+							Description: "ReusePolicy is the reuse policy of the pod CIDR. The default is \"Reusable\".",
 							Type:        []string{"string"},
 							Format:      "",
 						},
