@@ -53,7 +53,7 @@ THIS_PKG="github.com/GoogleCloudPlatform/gke-networking-api"
 GOBIN="$(go env GOBIN)"
 gobin="${GOBIN:-$(go env GOPATH)/bin}"
 
-for crd in "network" "gcpfirewall" "nodetopology" "fqdnnetworkpolicy" "nodenetworkconfig"; do
+for crd in "network" "gcpfirewall" "nodetopology" "fqdnnetworkpolicy" "nodenetworkconfig" "trafficselector"; do
   echo "Generating $crd CRD client"
   kube::codegen::gen_client \
       --with-watch \
@@ -70,7 +70,7 @@ for crd in "network" "gcpfirewall" "nodetopology" "fqdnnetworkpolicy" "nodenetwo
     output:crd:dir="${SCRIPT_ROOT}/config/crds"
 done
 
-for crd_with_version in "network/v1" "gcpfirewall/v1" "nodetopology/v1" "fqdnnetworkpolicy/v1alpha1" "nodenetworkconfig/v1"; do
+for crd_with_version in "network/v1" "gcpfirewall/v1" "nodetopology/v1" "fqdnnetworkpolicy/v1alpha1" "nodenetworkconfig/v1" "trafficselector/v2"; do
   echo "Generating register for CRD $crd_with_version"
   "${gobin}/register-gen" \
       "${SCRIPT_ROOT}/apis/$crd_with_version" \
@@ -79,7 +79,7 @@ for crd_with_version in "network/v1" "gcpfirewall/v1" "nodetopology/v1" "fqdnnet
 done
 
 
-for crd_with_version in "gcpfirewall/v1" "nodetopology/v1" "fqdnnetworkpolicy/v1alpha1" "nodenetworkconfig/v1"; do
+for crd_with_version in "gcpfirewall/v1" "nodetopology/v1" "fqdnnetworkpolicy/v1alpha1" "nodenetworkconfig/v1" "trafficselector/v2"; do
   echo "Generating openapi for CRD $crd_with_version"
   "${gobin}/openapi-gen" \
       --output-pkg "${THIS_PKG}/apis/${crd_with_version}" \
